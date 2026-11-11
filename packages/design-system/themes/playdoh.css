@@ -79,7 +79,8 @@
   --plt-price-tracking: 0;
 
   --plt-page-width: 90rem;
-  --plt-page-margin: 1.5rem;
+  --plt-gutter-min: 1.5;
+  --plt-gutter-max: 3;
   --plt-section-gap-min: 3rem;
 
   --plt-elevation: var(--plt-clay-inset), var(--plt-clay-drop);

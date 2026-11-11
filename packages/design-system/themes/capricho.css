@@ -71,7 +71,8 @@
   --plt-price-tracking: 0.02em;
 
   --plt-page-width: 90rem;
-  --plt-page-margin: 2rem;
+  --plt-gutter-min: 2;
+  --plt-gutter-max: 3.5;
   --plt-section-gap-min: 4.5rem;
 
   /* Elevation: soft, never a hard offset. */
