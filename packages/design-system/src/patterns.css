@@ -14,7 +14,7 @@
 .plt-section-header__eyebrow { justify-self: start; }
 .plt-section-header__title { margin: 0; color: var(--plt-color-primary); }
 .plt-section-header__description {
-  max-width: 42rem;
+  max-width: var(--plt-measure);
   margin: 0;
   color: color-mix(in oklab, var(--plt-color-base-content) 80%, transparent);
 }
@@ -203,9 +203,9 @@
   z-index: 1;
   width: min(calc(100% - (var(--plt-page-margin) * 2)), var(--plt-page-width));
   margin-inline: auto;
-  padding-block: clamp(5rem, 12vw, 8rem);
+  padding-block: var(--plt-space-section-lg);
 }
-.plt-hero__copy { display: grid; gap: 1.5rem; max-width: 42rem; }
+.plt-hero__copy { display: grid; gap: 1.5rem; max-width: var(--plt-measure); }
 .plt-hero--media .plt-hero__content { color: var(--plt-color-base-100); }
 /* Outline actions over media: light outline at rest, light fill on hover
  * (daisyUI variables carry the d- prefix). Overrides the dark border that
@@ -227,7 +227,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
-  padding: clamp(2rem, 5vw, 4rem);
+  padding: var(--plt-space-panel);
 }
 .plt-split-cta__media {
   min-height: 25rem;
@@ -270,11 +270,11 @@
   .plt-promo-strip__inner { flex-direction: row; text-align: start; }
 }
 
-.plt-newsletter { padding: clamp(4rem, 10vw, 8rem) var(--plt-page-margin); }
+.plt-newsletter { padding: var(--plt-space-section-lg) var(--plt-page-margin); }
 .plt-newsletter__card {
-  max-width: 36rem;
+  max-width: var(--plt-measure-short);
   margin-inline: auto;
-  padding: clamp(2rem, 5vw, 3rem);
+  padding: var(--plt-space-panel);
   text-align: center;
 }
 .plt-newsletter__content { display: grid; gap: 1rem; }
@@ -418,7 +418,7 @@
 .plt-footer {
   border-top: var(--plt-section-border-width) solid var(--plt-border-color);
   background: var(--plt-color-base-300);
-  padding: clamp(3rem, 8vw, 5rem) var(--plt-page-margin) 2rem;
+  padding: var(--plt-space-section) var(--plt-page-margin) 2rem;
 }
 .plt-footer__inner {
   display: grid;
@@ -593,29 +593,42 @@
 }
 .plt-free-shipping__message { margin: 0; }
 
-/* Product grid layout. */
+/* Product grid layout.
+ * Intrinsic, not viewport-driven: the column count is whatever fits in the
+ * grid's own width with cards no narrower than --plt-product-card-min, capped
+ * at --plt-product-grid-columns. So the same grid goes 4-up full width and
+ * drops to 3-up beside a filter sidebar without a media query.
+ *
+ * The track minimum is max(card min, the width of one column at the cap):
+ * auto-fill then can never place more than the cap, and when the cap does not
+ * fit it steps down one column at a time. min(100%, ...) keeps a single card
+ * from overflowing a very narrow parent. */
 .plt-product-grid {
+  --plt-product-grid-columns: 4;
+  --_plt-grid-gap: var(--plt-product-grid-gap, var(--plt-grid-gap));
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(var(--plt-product-grid-columns, 2), minmax(0, 1fr));
+  gap: var(--_plt-grid-gap);
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      min(
+        100%,
+        max(
+          var(--plt-product-grid-card-min, var(--plt-product-card-min)),
+          (100% - (var(--plt-product-grid-columns) - 1) * var(--_plt-grid-gap)) / var(--plt-product-grid-columns)
+        )
+      ),
+      1fr
+    )
+  );
 }
-@media (min-width: 40rem) {
-  .plt-product-grid { --plt-product-grid-columns: 3; }
-}
-@media (min-width: 64rem) {
-  .plt-product-grid { --plt-product-grid-columns: 4; }
-}
-/* Column hints set the widest layout. Narrow viewports step down so cards
- * never overflow a phone screen (a fixed 3-up grid at 390px is ~100px/card). */
+/* Column hints set the widest layout; narrower containers step down. */
 .plt-product-grid--cols-2 { --plt-product-grid-columns: 2; }
-.plt-product-grid--cols-3 { --plt-product-grid-columns: 1; }
-.plt-product-grid--cols-4 { --plt-product-grid-columns: 2; }
-@media (min-width: 40rem) {
-  .plt-product-grid--cols-3,
-  .plt-product-grid--cols-4 { --plt-product-grid-columns: 3; }
-}
-@media (min-width: 64rem) {
-  .plt-product-grid--cols-4 { --plt-product-grid-columns: 4; }
+.plt-product-grid--cols-4 { --plt-product-grid-columns: 4; }
+/* 3-up uses larger cards: one per row on phones, three from about 640px. */
+.plt-product-grid--cols-3 {
+  --plt-product-grid-columns: 3;
+  --plt-product-grid-card-min: 10.5rem;
 }
 
 /* Product quick view modal */
@@ -836,7 +849,7 @@ plt-quick-view dialog::backdrop {
 .plt-faq .d-collapse-content { padding-inline: 0; }
 
 /* Shopify rich text (product descriptions, pages, articles, policies). */
-.plt-prose { max-width: 48rem; line-height: 1.7; }
+.plt-prose { max-width: var(--plt-measure-long); line-height: 1.7; }
 .plt-prose > * + * { margin-top: 1em; }
 .plt-prose h1,
 .plt-prose h2,

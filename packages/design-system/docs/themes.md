@@ -46,7 +46,26 @@ An application can pick the theme at build time (for example from a `THEME` envi
 - Surface relief: `--plt-elevation-inset` (an inset `box-shadow` list). Cards (`.d-card.theme-elevated`) paint it on an overlay above their children, so a photo or banner that fills one side of the card gets the same relief as the rest. Empty by default. Do not set inset shadows on the card's own `box-shadow`: media covers them.
 - Media: `--plt-media-background` (ground behind photos) and `--plt-media-fit` (`contain` or `cover`).
 - Type: `--plt-font-{display,body,accent}`, `--plt-heading-{weight,tracking,transform}`, `--plt-label-{weight,tracking,transform}`, `--plt-price-tracking`.
-- Layout: `--plt-page-width`, `--plt-page-margin`, `--plt-section-gap-min`.
+- Layout: `--plt-page-width`, `--plt-section-gap-min`, and the fluid pairs below.
+
+### Fluid layout
+
+Gutters, section spacing, panel padding and the product-card minimum grow linearly from a 320px to a 1280px viewport (`src/tokens/layout.css`). A theme sets each one as two unitless rem numbers, never a `clamp()`:
+
+```css
+:root {
+  --plt-gutter-min: 1.5;            /* 1.5rem side margin at 320px */
+  --plt-gutter-max: 3;              /* 3rem from 1280px up */
+  --plt-space-section-{min,max}: …; /* .plt-section padding */
+  --plt-space-section-lg-{min,max}: …; /* hero, newsletter */
+  --plt-space-panel-{min,max}: …;   /* split CTA, newsletter card */
+  --plt-product-card-{min-min,min-max}: …; /* when the product grid drops a column */
+}
+```
+
+`--plt-page-margin` is now an alias of `--plt-gutter`; set the pair instead. Text widths use `--plt-measure-short` / `--plt-measure` / `--plt-measure-long` (45 / 66 / 75 characters, capped at the previous rem widths), so line length holds when a theme swaps to a wider or narrower font.
+
+The product grid no longer uses viewport media queries: it fits as many columns as its own width allows at `--plt-product-card-min`, up to the `--cols-N` hint, so it steps down by itself beside a filter sidebar.
 
 Unset tokens fall back to the PLT defaults in `src/tokens.css`, `src/geometry.css` and `src/typography.css`.
 

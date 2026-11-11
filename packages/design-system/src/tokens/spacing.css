@@ -2,7 +2,9 @@
   --plt-section-gap-min: 3rem;
   --plt-spacing-scale: 1;
   --plt-page-width: 110rem;
-  --plt-page-margin: 1.5rem;
+  /* Alias of the fluid gutter (tokens/layout.css). Themes tune
+     --plt-gutter-min / --plt-gutter-max instead of setting this. */
+  --plt-page-margin: var(--plt-gutter);
 
   /* Docs / editorial shell (PageOutline, NavTree, EditorialShell). */
   --plt-docs-sticky-top: 4.75rem;

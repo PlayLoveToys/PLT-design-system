@@ -1,0 +1,99 @@
+/* Fluid layout tokens.
+ *
+ * Widths and spacing grow linearly between two reference viewports instead of
+ * jumping at breakpoints. Every fluid token is declared by two unitless rem
+ * values (its size at the narrow and at the wide reference viewport), so a
+ * theme tunes a token by changing two numbers and never writes a clamp():
+ *
+ *   --plt-gutter-min: 1;     1rem at a 20rem (320px) viewport
+ *   --plt-gutter-max: 3;     3rem at an 80rem (1280px) viewport and wider
+ *
+ * Why unitless: CSS cannot multiply two lengths, so the interpolation
+ *   size = min + (max - min) × t
+ * needs (max - min) as a plain number. --plt-fluid-t is the viewport's position
+ * in the fluid range expressed as a length where 1rem means 100%:
+ *   t = (100vw - 20rem) / (80 - 20)
+ * The rem part keeps browser zoom and the user's font size working.
+ *
+ * Three levels, each bounded by something different:
+ *   1. Page   — --plt-gutter + --plt-page-width: bounded by the viewport.
+ *   2. Text   — --plt-measure-*: bounded by characters per line (ch).
+ *   3. Parts  — --plt-product-card-min and container queries: bounded by
+ *               the space the component actually has, not the screen.
+ */
+:root {
+  /* Reference viewports in rem, unitless. Keep in sync with
+     --plt-breakpoint-fluid-min/max (tokens/breakpoints.css). */
+  --plt-fluid-vw-min: 20;
+  --plt-fluid-vw-max: 80;
+  --plt-fluid-t: calc(
+    (100vw - var(--plt-fluid-vw-min) * 1rem) / (var(--plt-fluid-vw-max) - var(--plt-fluid-vw-min))
+  );
+
+  /* 1. Page ---------------------------------------------------------------- */
+
+  /* Side margin of every page-width container. Themes override min/max. */
+  --plt-gutter-min: 1.5;
+  --plt-gutter-max: 3;
+  --plt-gutter: clamp(
+    var(--plt-gutter-min) * 1rem,
+    var(--plt-gutter-min) * 1rem + (var(--plt-gutter-max) - var(--plt-gutter-min)) * var(--plt-fluid-t),
+    var(--plt-gutter-max) * 1rem
+  );
+
+  /* Named content widths below the page width (--plt-page-width, set per theme
+     in spacing.css). Use with .plt-container--narrow / --content. */
+  --plt-content-narrow: 48rem;
+  --plt-content-default: 72rem;
+
+  /* Vertical rhythm between sections. */
+  --plt-space-section-min: 3;
+  --plt-space-section-max: 5;
+  --plt-space-section: clamp(
+    var(--plt-space-section-min) * 1rem,
+    var(--plt-space-section-min) * 1rem + (var(--plt-space-section-max) - var(--plt-space-section-min)) * var(--plt-fluid-t),
+    var(--plt-space-section-max) * 1rem
+  );
+  --plt-space-section-lg-min: 5;
+  --plt-space-section-lg-max: 8;
+  --plt-space-section-lg: clamp(
+    var(--plt-space-section-lg-min) * 1rem,
+    var(--plt-space-section-lg-min) * 1rem + (var(--plt-space-section-lg-max) - var(--plt-space-section-lg-min)) * var(--plt-fluid-t),
+    var(--plt-space-section-lg-max) * 1rem
+  );
+  /* Inner padding of panels and cards that span a section (split CTA,
+     newsletter card). */
+  --plt-space-panel-min: 2;
+  --plt-space-panel-max: 4;
+  --plt-space-panel: clamp(
+    var(--plt-space-panel-min) * 1rem,
+    var(--plt-space-panel-min) * 1rem + (var(--plt-space-panel-max) - var(--plt-space-panel-min)) * var(--plt-fluid-t),
+    var(--plt-space-panel-max) * 1rem
+  );
+
+  /* 2. Text measure -------------------------------------------------------- */
+
+  /* Characters per line. 45–75ch is the readable range; ch follows the font
+     of the element it is used on, so the measure holds across themes whose
+     fonts differ in width. The rem caps keep the old maximums as an upper
+     bound for wide or condensed faces. */
+  --plt-measure-short: min(45ch, 36rem); /* lead copy, cards, forms */
+  --plt-measure: min(66ch, 42rem); /* section descriptions, hero copy */
+  --plt-measure-long: min(75ch, 48rem); /* long-form prose */
+
+  /* 3. Components ---------------------------------------------------------- */
+
+  /* Smallest a product card may get before the grid drops a column: 7.5rem on
+     a 320px screen up to 14rem at 1280px. With the default gutter and gap
+     this gives 2 columns on phones, 3 from about 640px and 4 from about
+     1024px of available width — measured on the grid's own width, so it also
+     holds next to a filter sidebar. */
+  --plt-product-card-min-min: 7.5;
+  --plt-product-card-min-max: 14;
+  --plt-product-card-min: clamp(
+    var(--plt-product-card-min-min) * 1rem,
+    var(--plt-product-card-min-min) * 1rem + (var(--plt-product-card-min-max) - var(--plt-product-card-min-min)) * var(--plt-fluid-t),
+    var(--plt-product-card-min-max) * 1rem
+  );
+  --plt-grid-gap: 1.5rem;
+}

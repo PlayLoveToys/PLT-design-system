@@ -73,7 +73,8 @@
   --plt-price-tracking: 0;
 
   --plt-page-width: 80rem;
-  --plt-page-margin: 1.5rem;
+  --plt-gutter-min: 1.5;
+  --plt-gutter-max: 3;
   --plt-section-gap-min: 3.5rem;
 
   --plt-elevation: 0 1px 0 rgba(42, 37, 33, 0.14), 0 2px 6px rgba(42, 37, 33, 0.08);
