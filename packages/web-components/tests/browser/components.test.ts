@@ -256,6 +256,45 @@ describe.each(frontends)("$name storefront", ({ name, clientRouted }) => {
   });
 });
 
+/**
+ * Same size and no visible difference. Chromium rasterizes anti-aliased edges (a checkbox shadow, text at a
+ * half-pixel baseline) with a one-level wobble from run to run, so byte equality fails about one run in four
+ * even for one page. A real layout or colour difference changes thousands of pixels, or by far more than
+ * two levels, and still fails here.
+ */
+async function imagesMatch(a: Buffer, b: Buffer, { maxDelta = 2, maxShare = 0.002 } = {}) {
+  if (a.equals(b)) return true;
+  const context = await browser.newContext();
+  try {
+    const page = await context.newPage();
+    const { sizeEqual, share, worst } = await page.evaluate(
+      async ([x, y]) => {
+        const load = async (base64: string) => {
+          const bitmap = await createImageBitmap(await (await fetch(`data:image/png;base64,${base64}`)).blob());
+          const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+          const ctx = canvas.getContext("2d")!;
+          ctx.drawImage(bitmap, 0, 0);
+          return ctx.getImageData(0, 0, bitmap.width, bitmap.height);
+        };
+        const [one, two] = await Promise.all([load(x), load(y)]);
+        if (one.width !== two.width || one.height !== two.height) return { sizeEqual: false, share: 1, worst: 255 };
+        let differing = 0;
+        let largest = 0;
+        for (let i = 0; i < one.data.length; i += 4) {
+          const delta = Math.max(...[0, 1, 2, 3].map((c) => Math.abs(one.data[i + c] - two.data[i + c])));
+          if (delta > 0) differing += 1;
+          largest = Math.max(largest, delta);
+        }
+        return { sizeEqual: true, share: differing / (one.width * one.height), worst: largest };
+      },
+      [a.toString("base64"), b.toString("base64")],
+    );
+    return sizeEqual && worst <= maxDelta && share <= maxShare;
+  } finally {
+    await context.close();
+  }
+}
+
 describe("cross-frontend parity of the shared components", () => {
   it("renders identical collection controls and pagination in the three frontends", async () => {
     const shots: Record<string, Buffer[]> = { controls: [], pagination: [] };
@@ -267,8 +306,8 @@ describe("cross-frontend parity of the shared components", () => {
       await close();
     }
     for (const images of Object.values(shots)) {
-      expect(images[1].equals(images[0])).toBe(true);
-      expect(images[2].equals(images[0])).toBe(true);
+      expect(await imagesMatch(images[0], images[1])).toBe(true);
+      expect(await imagesMatch(images[0], images[2])).toBe(true);
     }
   });
 

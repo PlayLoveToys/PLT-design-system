@@ -17,8 +17,7 @@ jobs:
       - run: npm install
       # Chromium for @playlovetoys/web-components browser tests.
       # Self-hosted host is Ubuntu 26.04; Playwright 1.56 has no native 26.04
-      # profile — override to 24.04. OS libs are preinstalled on the runner
-      # (no --with-deps: github-runner has no sudo).
+      # profile — override to 24.04.
       - name: Install Playwright Chromium
         env:
           PLAYWRIGHT_HOST_PLATFORM_OVERRIDE: ubuntu24.04-x64
