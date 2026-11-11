@@ -17,14 +17,17 @@ jobs:
       - run: npm install
       # Chromium for @playlovetoys/web-components browser tests.
       # Self-hosted host is Ubuntu 26.04; Playwright 1.56 has no native 26.04
-      # profile — override to 24.04. github-runner has no sudo, so there is no
-      # --with-deps: the system libraries Chromium needs (libnss3, libatk, ...)
-      # are fetched as .deb files without root when the host lacks them.
-      - name: Chromium system libraries (no sudo)
-        run: bash scripts/ci-chromium-libs.sh
+      # profile — override to 24.04.
       - name: Install Playwright Chromium
         env:
           PLAYWRIGHT_HOST_PLATFORM_OVERRIDE: ubuntu24.04-x64
         run: npx playwright install chromium
+      # github-runner has no sudo, so no --with-deps. The install above only warns
+      # about missing system libraries (libnss3, libatk, libXRes, ...); this step
+      # asks ldd what the downloaded browser still cannot find, fetches those
+      # packages as .deb files without root and exports LD_LIBRARY_PATH. It does
+      # nothing when the host already has everything.
+      - name: Chromium system libraries (no sudo)
+        run: bash scripts/ci-chromium-libs.sh
       - run: npm run check
 
