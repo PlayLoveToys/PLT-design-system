@@ -23,5 +23,22 @@ jobs:
         env:
           PLAYWRIGHT_HOST_PLATFORM_OVERRIDE: ubuntu24.04-x64
         run: npx playwright install chromium
+      # The runner lacks some Chromium libraries (libnss3, libatk, libasound...)
+      # and has no sudo. When they are missing, unpack the packages into the
+      # job's temp dir without installing them and expose them through
+      # LD_LIBRARY_PATH. A no-op once the host has them.
+      - name: Chromium system libraries (no sudo)
+        run: |
+          if ldconfig -p | grep -q 'libnss3\.so' && ldconfig -p | grep -q 'libasound\.so\.2'; then
+            echo "Chromium libraries present on the host."
+            exit 0
+          fi
+          libs="$RUNNER_TEMP/chromium-libs"
+          mkdir -p "$libs/debs" "$libs/root"
+          cd "$libs/debs"
+          apt-get download libnspr4 libnss3 libatk1.0-0t64 libatk-bridge2.0-0t64 \
+            libatspi2.0-0t64 libxdamage1 libasound2t64
+          for deb in *.deb; do dpkg -x "$deb" "$libs/root"; done
+          echo "LD_LIBRARY_PATH=$libs/root/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
       - run: npm run check
 
