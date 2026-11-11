@@ -65,7 +65,8 @@
   --plt-shadow-active-offset: 0px;
 
   --plt-page-width: 87.5rem;
-  --plt-page-margin: 1.25rem;
+  --plt-gutter-min: 1.25;
+  --plt-gutter-max: 2.5;
   --plt-section-gap-min: 2.5rem;
 
   --plt-font-display: "Inter", system-ui, sans-serif;

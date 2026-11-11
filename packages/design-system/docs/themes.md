@@ -16,6 +16,7 @@ A theme is a file in `themes/` that sets the `--plt-*` token values and adds the
 | `workbench` | `themes/workbench.css` | Production tool as printed matter: warm paper, coral, slate, mustard and olive inks, 1px rules, flat minimal shadows, IBM Plex Serif, Sans and Mono. |
 | `playlovetoys` | `themes/playlovetoys.css` | The live storefront brand: white and cool paper, purple structure, hot-pink call to action, teal accent, Roboto Condensed with Fredoka, 6px corners, soft cool shadows, springy motion, gradient hero. |
 | `playdoh` | `themes/playdoh.css` | Claymorphism: soft squishy clay with big radii (20 to 40px), two inset shadows plus a pastel drop shadow, on warm cream. Nectarine, Peche, Menthe and Lagune pastels with deep teal ink, Fredoka with Nunito, springy lift and press. |
+| `patio` | `themes/patio.css` | KV Custom Windows + Doors (kvcustomwd.com): white and Bootstrap greys, purple `#533379` structure and headings, pink `#ef446d` call to action, orange `#f2a413` and lavender `#a198ca` accents, Roboto Slab headlines in spaced capitals with Instrument Sans, square corners, hairlines, no shadows, a 120 × 8 purple rule under the hero headline. White on the pink is 3.7:1 (bold buttons only). |
 | `cheesecake` | `themes/cheesecake.css` | **Canonical storefront look** — mirror of Liquid daisyUI `brand`: cream `#FAF7F2`, 1.5px borders, 3px section borders, 2px hard shadows (hover 5px), capitalised Fjalla One, Atkinson Hyperlegible and Space Grotesk, purple / hot pink / teal. Same tokens as `plt`. See `storefront-visual-parity.md`. |
 
 ## Using one
@@ -45,7 +46,26 @@ An application can pick the theme at build time (for example from a `THEME` envi
 - Surface relief: `--plt-elevation-inset` (an inset `box-shadow` list). Cards (`.d-card.theme-elevated`) paint it on an overlay above their children, so a photo or banner that fills one side of the card gets the same relief as the rest. Empty by default. Do not set inset shadows on the card's own `box-shadow`: media covers them.
 - Media: `--plt-media-background` (ground behind photos) and `--plt-media-fit` (`contain` or `cover`).
 - Type: `--plt-font-{display,body,accent}`, `--plt-heading-{weight,tracking,transform}`, `--plt-label-{weight,tracking,transform}`, `--plt-price-tracking`.
-- Layout: `--plt-page-width`, `--plt-page-margin`, `--plt-section-gap-min`.
+- Layout: `--plt-page-width`, `--plt-section-gap-min`, and the fluid pairs below.
+
+### Fluid layout
+
+Gutters, section spacing, panel padding and the product-card minimum grow linearly from a 320px to a 1280px viewport (`src/tokens/layout.css`). A theme sets each one as two unitless rem numbers, never a `clamp()`:
+
+```css
+:root {
+  --plt-gutter-min: 1.5;            /* 1.5rem side margin at 320px */
+  --plt-gutter-max: 3;              /* 3rem from 1280px up */
+  --plt-space-section-{min,max}: …; /* .plt-section padding */
+  --plt-space-section-lg-{min,max}: …; /* hero, newsletter */
+  --plt-space-panel-{min,max}: …;   /* split CTA, newsletter card */
+  --plt-product-card-{min-min,min-max}: …; /* when the product grid drops a column */
+}
+```
+
+`--plt-page-margin` is now an alias of `--plt-gutter`; set the pair instead. Text widths use `--plt-measure-short` / `--plt-measure` / `--plt-measure-long` (45 / 66 / 75 characters, capped at the previous rem widths), so line length holds when a theme swaps to a wider or narrower font.
+
+The product grid no longer uses viewport media queries: it fits as many columns as its own width allows at `--plt-product-card-min`, up to the `--cols-N` hint, so it steps down by itself beside a filter sidebar.
 
 Unset tokens fall back to the PLT defaults in `src/tokens.css`, `src/geometry.css` and `src/typography.css`.
 

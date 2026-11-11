@@ -1,0 +1,246 @@
+/* Theme: patio. KV Custom Windows + Doors: confident, architectural, on white.
+ * Roboto Slab headlines in spaced capitals, Instrument Sans for everything
+ * else, KV purple for structure and headings, hot pink for the call to action,
+ * orange and lavender as accents, square corners, hairlines, no shadows.
+ *
+ * Extracted from the live site (kvcustomwd.com, Bootstrap 5 + brand overrides)
+ * into the "KV Custom Windows + Doors" design system; values are exact. The
+ * status colours are the Bootstrap defaults the site inherits. White on the
+ * pink (#ef446d) is 3.7:1, as on the site: it passes only for bold 19px+
+ * text, so buttons stay bold. Accent content is ink, not the site's white
+ * (2.1:1 on orange). Instrument Sans and Roboto Slab are named here and loaded
+ * by the consuming app.
+ */
+@source "../renderers";
+
+@import "../src/tokens.css";
+@import "../src/geometry.css";
+@import "../src/daisyui-theme.css";
+@import "../src/base.css";
+
+:root {
+  --plt-color-base-100: #ffffff;
+  --plt-color-base-200: #f8f9fa;
+  --plt-color-base-300: #f1f2f2;
+  --plt-color-base-content: #212529;
+  --plt-color-primary: #533379;
+  --plt-color-primary-content: #ffffff;
+  --plt-color-secondary: #ef446d;
+  --plt-color-secondary-content: #ffffff;
+  --plt-color-accent: #f2a413;
+  --plt-color-accent-content: #000000;
+  --plt-color-neutral: #212529;
+  --plt-color-neutral-content: #ffffff;
+  --plt-color-info: #0dcaf0;
+  --plt-color-info-content: #000000;
+  --plt-color-success: #198754;
+  --plt-color-success-content: #ffffff;
+  --plt-color-warning: #ffc107;
+  --plt-color-warning-content: #000000;
+  --plt-color-error: #dc3545;
+  --plt-color-error-content: #ffffff;
+
+  /* Brand extras: the product-line colours and the feature-band ground.
+     Windows = pink, Entrance Doors = purple, Patio Doors = orange. */
+  --plt-kv-purple: #533379;
+  --plt-kv-pink: #ef446d;
+  --plt-kv-orange: #f2a413;
+  --plt-kv-lavender: #a198ca;
+  --plt-kv-ink: #000000;
+
+  --plt-border-color: #dee2e6;
+  --plt-shadow-color: transparent;
+  /* Bootstrap's secondary text: body colour at 75% (6.9:1 on white). */
+  --plt-color-meta: color-mix(in oklab, var(--plt-color-base-content) 75%, transparent);
+
+  --plt-radius-selector: 0;
+  --plt-radius-field: 0.375rem;
+  --plt-radius-box: 0;
+  --plt-size-selector: 0.25rem;
+  --plt-size-field: 0.25rem;
+  --plt-border-width: 1px;
+  --plt-section-border-width: 0px;
+  --plt-shadow-offset: 0px;
+  --plt-shadow-hover-offset: 0px;
+  --plt-shadow-active-offset: 0px;
+
+  --plt-media-background: #e9ecef;
+  --plt-media-fit: cover;
+
+  --plt-font-display: "Roboto Slab", Rockwell, Georgia, serif;
+  --plt-font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --plt-font-accent: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --plt-heading-weight: 700;
+  /* 6px at the 48px section title. */
+  --plt-heading-tracking: 0.125em;
+  --plt-heading-transform: uppercase;
+  --plt-label-weight: 700;
+  --plt-label-tracking: normal;
+  --plt-label-transform: none;
+  --plt-price-tracking: normal;
+
+  --plt-page-width: 82.5rem;
+  --plt-gutter-min: 1;
+  --plt-gutter-max: 2;
+  --plt-section-gap-min: 3rem;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Plain headings are title case with slight tracking (feature and panel
+ * titles); the spaced capitals belong to the theme-headline-* hooks. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--plt-font-display);
+  font-weight: var(--plt-heading-weight);
+  letter-spacing: 0.025em;
+  line-height: 1.2;
+  color: var(--plt-color-primary);
+}
+
+.theme-headline-lg {
+  line-height: 1.25;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--plt-kv-lavender) 60%, transparent);
+}
+
+/* A solid purple ring (9.9:1 on white); the site only has Bootstrap's. */
+:focus-visible {
+  outline: 3px solid var(--plt-color-primary);
+  outline-offset: 2px;
+}
+
+.plt-product-card {
+  --plt-card-media-border: var(--plt-border-color);
+}
+
+/* Flat: depth comes from colour blocks and photos, never shadow. */
+.theme-elevated,
+.theme-elevated:hover,
+.theme-elevated:active,
+.theme-sidebar-shadow {
+  box-shadow: none;
+  transform: none;
+}
+
+/* Hero: white ground; over a photo the left side fades to white so the purple
+ * headline reads, and the headline carries the 120 x 8 purple rule. */
+.plt-hero {
+  background: var(--plt-color-base-100);
+}
+
+.plt-hero--media .plt-hero__overlay {
+  background: linear-gradient(90deg, var(--plt-color-base-100) 0%, color-mix(in srgb, var(--plt-color-base-100) 70%, transparent) 40%, transparent 70%);
+}
+
+.plt-hero--media .plt-hero__content {
+  color: var(--plt-kv-ink);
+}
+
+.plt-hero .theme-headline-lg {
+  color: var(--plt-color-primary);
+}
+
+.plt-hero .theme-headline-lg::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 8px;
+  margin-top: 1rem;
+  background: var(--plt-color-primary);
+}
+
+/* Over the faded photo the outline action stays dark (the base pattern makes
+ * it light for dark overlays). */
+.plt-hero--media .d-btn-outline {
+  --d-btn-color: var(--plt-color-base-content);
+  --d-btn-fg: var(--plt-color-base-100);
+  border-color: var(--plt-color-base-content);
+  color: var(--plt-color-base-content);
+}
+
+/* The footer keeps a hairline on top although sections have no dividers. */
+.plt-footer {
+  border-top: 1px solid var(--plt-border-color);
+}
+
+/* Buttons: square, bold, 38px blocks. The site's .btn-primary is pink and its
+ * .btn-secondary purple, so the daisyUI primary button takes the pink call to
+ * action and the secondary button the purple. */
+.d-btn {
+  font-family: var(--plt-font-accent);
+  font-weight: 700;
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+  border: 1px solid transparent;
+  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out, color 150ms ease-in-out;
+}
+
+.d-btn-primary {
+  background: var(--plt-color-secondary);
+  border-color: var(--plt-color-secondary);
+  color: var(--plt-color-secondary-content);
+}
+
+.d-btn-primary:hover {
+  background: color-mix(in srgb, var(--plt-color-secondary) 85%, black);
+  border-color: color-mix(in srgb, var(--plt-color-secondary) 85%, black);
+}
+
+.d-btn-secondary {
+  background: var(--plt-color-primary);
+  border-color: var(--plt-color-primary);
+  color: var(--plt-color-primary-content);
+}
+
+.d-btn-secondary:hover {
+  background: color-mix(in srgb, var(--plt-color-primary) 85%, black);
+  border-color: color-mix(in srgb, var(--plt-color-primary) 85%, black);
+}
+
+/* Bootstrap outline-dark: ink frame, fills with ink on hover. */
+.d-btn-outline {
+  background: transparent;
+  border-color: var(--plt-color-base-content);
+  color: var(--plt-color-base-content);
+}
+
+.d-btn-outline:hover {
+  background: var(--plt-color-base-content);
+  color: var(--plt-color-base-100);
+}
+
+.d-btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--plt-color-primary);
+}
+
+/* Fields: white, a light hairline, Bootstrap's 6px corners. */
+.d-input,
+.d-select,
+.d-textarea {
+  background: var(--plt-color-base-100);
+  border: 1px solid var(--plt-border-color);
+  box-shadow: none;
+}
+
+.d-input:focus,
+.d-select:focus,
+.d-textarea:focus {
+  border-color: var(--plt-color-primary);
+  outline: none;
+}
+
+.d-badge {
+  border-radius: 0;
+  font-weight: 700;
+}

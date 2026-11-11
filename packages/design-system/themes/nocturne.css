@@ -78,7 +78,8 @@
   --plt-shadow-active-offset: 0px;
 
   /* Density 0.7x on the layout tokens. */
-  --plt-page-margin: 1.05rem;
+  --plt-gutter-min: 1.05;
+  --plt-gutter-max: 2.1;
   --plt-section-gap-min: 2.1rem;
 
   --plt-font-display: "Inter", system-ui, sans-serif;

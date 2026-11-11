@@ -71,7 +71,8 @@
   --plt-price-tracking: 0;
 
   --plt-page-width: 80rem;
-  --plt-page-margin: 1.5rem;
+  --plt-gutter-min: 1.5;
+  --plt-gutter-max: 3;
   --plt-section-gap-min: 3.5rem;
 
   --plt-elevation: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);

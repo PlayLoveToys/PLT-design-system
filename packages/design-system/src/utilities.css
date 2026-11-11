@@ -2,9 +2,25 @@
   width: min(calc(100% - (2 * var(--plt-page-margin))), var(--plt-page-width));
   margin-inline: auto;
 }
+/* Narrower page containers; same fluid gutter. */
+.plt-container--content { --plt-page-width: var(--plt-content-default); }
+.plt-container--narrow { --plt-page-width: var(--plt-content-narrow); }
 
 .plt-section {
-  padding-block: clamp(3rem, 6vw, 5rem);
+  padding-block: var(--plt-space-section);
+}
+
+/* Readable line length for any text block (see --plt-measure-* tokens). */
+.plt-measure { max-width: var(--plt-measure); }
+.plt-measure-short { max-width: var(--plt-measure-short); }
+.plt-measure-long { max-width: var(--plt-measure-long); }
+
+/* Generic intrinsic grid: as many columns as fit at --plt-grid-min, no media
+ * queries. Override --plt-grid-min on the element. */
+.plt-auto-grid {
+  display: grid;
+  gap: var(--plt-grid-gap);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--plt-grid-min, 16rem)), 1fr));
 }
 
 .plt-section-stack {

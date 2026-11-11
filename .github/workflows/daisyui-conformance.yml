@@ -22,12 +22,29 @@ jobs:
         env:
           PLAYWRIGHT_HOST_PLATFORM_OVERRIDE: ubuntu24.04-x64
         run: npx playwright install chromium
-      # github-runner has no sudo, so no --with-deps. The install above only warns
-      # about missing system libraries (libnss3, libatk, libXRes, ...); this step
-      # asks ldd what the downloaded browser still cannot find, fetches those
-      # packages as .deb files without root and exports LD_LIBRARY_PATH. It does
-      # nothing when the host already has everything.
+      # The runner lacks some Chromium libraries (libnss3, libatk, libasound,
+      # libxres...) and has no sudo. Resolve Playwright's Chromium package
+      # list (ubuntu24.04) with its dependencies, unpack only the packages the
+      # host does not have into the job's temp dir, and expose them through
+      # LD_LIBRARY_PATH. A no-op once the host has them all.
       - name: Chromium system libraries (no sudo)
-        run: bash scripts/ci-chromium-libs.sh
+        run: |
+          pkgs="libasound2t64 libatk-bridge2.0-0t64 libatk1.0-0t64 libatspi2.0-0t64 libcairo2 libcups2t64 libdbus-1-3 libdrm2 libgbm1 libglib2.0-0t64 libnspr4 libnss3 libpango-1.0-0 libx11-6 libxcb1 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxkbcommon0 libxrandr2"
+          need=""
+          for p in $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts \
+              --no-breaks --no-replaces --no-enhances $pkgs | grep -v '^[ <]' | sort -u); do
+            dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q 'install ok installed' || need="$need $p"
+          done
+          if [ -z "$need" ]; then
+            echo "Chromium libraries present on the host."
+            exit 0
+          fi
+          echo "Unpacking without installing:$need"
+          libs="$RUNNER_TEMP/chromium-libs"
+          mkdir -p "$libs/debs" "$libs/root"
+          cd "$libs/debs"
+          for p in $need; do apt-get download "$p" || echo "skip $p"; done
+          for deb in *.deb; do dpkg -x "$deb" "$libs/root"; done
+          echo "LD_LIBRARY_PATH=$libs/root/usr/lib/x86_64-linux-gnu:$libs/root/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
       - run: npm run check
 

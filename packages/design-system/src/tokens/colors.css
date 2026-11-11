@@ -30,9 +30,9 @@
   --plt-color-highlight: color-mix(in oklab, var(--plt-color-secondary) 35%, transparent);
   --plt-color-highlight-content: var(--plt-color-base-content);
 
-  /* Secondary text (.theme-meta). Liquid uses `text-base-content/60`, but 60%
-     is only 3.3:1 on cheesecake/plt (the default look) and under 4.5:1 in six
-     other themes; 75% passes AA in all of them (meta-contrast.test.ts). Themes
-     with softer base content may raise it further. */
+  /* Secondary text (.theme-meta). 75% is the lowest round mix that keeps every
+     theme at WCAG AA (4.5:1) on base-100 and base-200; the default ink on
+     cream needs 73%, so Liquid `text-base-content/60` should follow to /75.
+     Themes with lighter base content may raise the mix further. */
   --plt-color-meta: color-mix(in oklab, var(--plt-color-base-content) 75%, transparent);
 }
