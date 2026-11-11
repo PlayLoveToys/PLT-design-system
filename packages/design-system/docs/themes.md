@@ -16,6 +16,7 @@ A theme is a file in `themes/` that sets the `--plt-*` token values and adds the
 | `workbench` | `themes/workbench.css` | Production tool as printed matter: warm paper, coral, slate, mustard and olive inks, 1px rules, flat minimal shadows, IBM Plex Serif, Sans and Mono. |
 | `playlovetoys` | `themes/playlovetoys.css` | The live storefront brand: white and cool paper, purple structure, hot-pink call to action, teal accent, Roboto Condensed with Fredoka, 6px corners, soft cool shadows, springy motion, gradient hero. |
 | `playdoh` | `themes/playdoh.css` | Claymorphism: soft squishy clay with big radii (20 to 40px), two inset shadows plus a pastel drop shadow, on warm cream. Nectarine, Peche, Menthe and Lagune pastels with deep teal ink, Fredoka with Nunito, springy lift and press. |
+| `patio` | `themes/patio.css` | KV Custom Windows + Doors (kvcustomwd.com): white and Bootstrap greys, purple `#533379` structure and headings, pink `#ef446d` call to action, orange `#f2a413` and lavender `#a198ca` accents, Roboto Slab headlines in spaced capitals with Instrument Sans, square corners, hairlines, no shadows, a 120 × 8 purple rule under the hero headline. White on the pink is 3.7:1 (bold buttons only). |
 | `cheesecake` | `themes/cheesecake.css` | **Canonical storefront look** — mirror of Liquid daisyUI `brand`: cream `#FAF7F2`, 1.5px borders, 3px section borders, 2px hard shadows (hover 5px), capitalised Fjalla One, Atkinson Hyperlegible and Space Grotesk, purple / hot pink / teal. Same tokens as `plt`. See `storefront-visual-parity.md`. |
 
 ## Using one
