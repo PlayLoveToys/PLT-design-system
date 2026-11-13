@@ -105,7 +105,7 @@ Visual units the storefront already uses on more than one surface, with no desig
 | `Faq` | Canonical editorial block plus home and local pages | **Defined** — `d-collapse` under `.plt-faq`; Liquid + Astro renderers. |
 | `RichText` | `rich_text` block | **Defined** — `.plt-prose` wrapper; Liquid + Astro; BlockRenderer consumes it. |
 | `AccountNav` | `/account/*` | Storefront: `src/components/account/AccountNav.astro`. Links arrive already resolved. |
-| `LocationCard` | Locations index | Storefront: `src/components/blocks/LocationCard.astro`. Media-card variant, not `CollectionCard`. |
+| `LocationCard` | Locations index | **Defined** — media-card (`plt-location-card`); not `CollectionCard`. |
 | `ChipPills` | Collection pills, related terms, home nav | **Defined** — `{ label, url, current? }[]`; Liquid + Astro. |
 | `ListingToolbar` | Index chrome for products, blogs, glossary, and locations | Composes `SearchField`, `FilterBar`, `SortSelect`, and `Pagination` so `ListBrowser` does not copy layout. |
 

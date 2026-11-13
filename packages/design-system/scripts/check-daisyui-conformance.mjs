@@ -117,6 +117,8 @@ const required = {
   "renderers/liquid/empty-state.liquid": ["d-alert", "d-btn", "plt-empty-state"],
   "renderers/astro/ui/ChipPills.astro": ["d-badge", "plt-chip-pills"],
   "renderers/liquid/chip-pills.liquid": ["d-badge", "plt-chip-pills"],
+  "renderers/astro/editorial/LocationCard.astro": ["d-card", "d-card-body", "d-card-title", "plt-media-card", "plt-location-card"],
+  "renderers/liquid/location-card.liquid": ["d-card", "d-card-body", "d-card-title", "plt-media-card", "plt-location-card"],
   "renderers/astro/commerce/Price.astro": ["plt-price", "plt-product-card__price"],
   "renderers/astro/commerce/Stock.astro": ["plt-stock", "data-stock-state"],
   "renderers/astro/editorial/PageOutline.astro": ["plt-docs-toc"],

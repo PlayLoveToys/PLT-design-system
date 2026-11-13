@@ -317,6 +317,14 @@ Required: `items` — array of `{ label, url, current? }`.
 
 Row of link pills for collection / related-term navigation. Anatomy: `.plt-chip-pills` of `a.d-badge` (`d-badge-primary` + `aria-current="page"` when `current`). Overflow scrolling stays in the consumer if needed.
 
+## LocationCard
+
+Required: `title`, `url`.
+
+Optional: `image_url`, `image_alt`, `description`, `meta` (city/region line).
+
+Locations index media-card — not `CollectionCard`. Anatomy: `d-card` + `.plt-media-card` + `.plt-location-card`.
+
 ## EmptyState
 
 Required: `heading`.

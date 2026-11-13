@@ -97,6 +97,10 @@ const requiredEscapes = {
     "{{ item.url | escape }}",
     "{{ item.label | escape }}",
   ],
+  "renderers/liquid/location-card.liquid": [
+    "{{ url | escape }}",
+    "{{ title | escape }}",
+  ],
   "renderers/liquid/search-field.liquid": [
     "{{ placeholder | default: 'Search products' | escape }}",
   ],

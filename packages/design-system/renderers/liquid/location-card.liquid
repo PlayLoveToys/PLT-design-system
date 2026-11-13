@@ -1,0 +1,13 @@
+{% comment %} PLT LocationCard (media-card). Not CollectionCard. {% endcomment %}
+<a href="{{ url | escape }}" class="d-card bg-base-100 theme-bordered theme-elevated plt-media-card plt-location-card">
+  {% if image_url != blank %}
+    <figure class="plt-media-card__media">
+      <img src="{{ image_url | escape }}" alt="{{ image_alt | default: title | escape }}" loading="lazy">
+    </figure>
+  {% endif %}
+  <div class="d-card-body plt-media-card__body">
+    <h2 class="d-card-title theme-headline-sm plt-media-card__title">{{ title | escape }}</h2>
+    {% if meta != blank %}<p class="theme-meta plt-media-card__meta">{{ meta | escape }}</p>{% endif %}
+    {% if description != blank %}<p class="theme-meta plt-media-card__description">{{ description | escape }}</p>{% endif %}
+  </div>
+</a>
