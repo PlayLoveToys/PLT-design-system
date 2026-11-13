@@ -7,27 +7,35 @@ interface Props {
   previousUrl?: string;
   nextUrl?: string;
   labels?: PltPaginationLabels;
+  compact?: boolean;
+  /** Optional URL fragment appended to every link (e.g. '#Comments-123'). */
+  anchor?: string;
   id?: string;
   class?: string;
 }
 
-const { pages, previousUrl, nextUrl, labels = {}, id, class: className } = Astro.props;
+const { pages, previousUrl, nextUrl, labels = {}, compact = false, anchor = "", id, class: className } = Astro.props;
+const withAnchor = (url?: string) => (url ? `${url}${anchor}` : url);
+const linkedPages = pages.map((page) => (page.url ? { ...page, url: withAnchor(page.url) } : page));
+const prev = withAnchor(previousUrl);
+const next = withAnchor(nextUrl);
 ---
 
 <plt-pagination
   id={id}
   class={className}
-  pages={JSON.stringify(pages)}
-  previous-url={previousUrl}
-  next-url={nextUrl}
+  pages={JSON.stringify(linkedPages)}
+  previous-url={prev}
+  next-url={next}
   labels={JSON.stringify(labels)}
+  variant={compact ? "compact" : undefined}
 >
   <nav data-plt-fallback aria-label={labels.nav ?? "Pagination"}>
-    {previousUrl && <a href={previousUrl}>{labels.previous ?? "Previous"}</a>}
-    {pages.map((page) =>
+    {prev && <a href={prev}>{labels.previous ?? "Previous"}</a>}
+    {linkedPages.map((page) =>
       page.url && !page.current ? <a href={page.url}>{page.label}</a> : <span aria-current={page.current ? "page" : undefined}>{page.label}</span>,
     )}
-    {nextUrl && <a href={nextUrl}>{labels.next ?? "Next"}</a>}
+    {next && <a href={next}>{labels.next ?? "Next"}</a>}
   </nav>
 </plt-pagination>
 

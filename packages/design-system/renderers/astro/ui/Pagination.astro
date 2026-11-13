@@ -13,6 +13,9 @@ interface Props {
   nextUrl?: string;
   prevLabel?: string;
   nextLabel?: string;
+  compact?: boolean;
+  /** Optional URL fragment appended to every link (e.g. '#Comments-123'). */
+  anchor?: string;
 }
 
 const {
@@ -22,19 +25,25 @@ const {
   nextUrl,
   prevLabel = "Previous",
   nextLabel = "Next",
+  compact = false,
+  anchor = "",
 } = Astro.props;
+
+const withAnchor = (url?: string) => (url ? `${url}${anchor}` : url);
+const prev = withAnchor(prevUrl);
+const next = withAnchor(nextUrl);
 ---
 
-<nav class="plt-pagination" aria-label={ariaLabel}>
+<nav class:list={["plt-pagination", { "plt-pagination--compact": compact }]} aria-label={ariaLabel}>
   <div class="d-join">
-    {prevUrl ? (
-      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={prevUrl}>{prevLabel}</a>
+    {prev ? (
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={prev}>{prevLabel}</a>
     ) : (
       <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{prevLabel}</button>
     )}
     {pages.map((page) =>
       page.url && !page.current && !page.disabled ? (
-        <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={page.url}>{page.label}</a>
+        <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={withAnchor(page.url)}>{page.label}</a>
       ) : (
         <button
           class:list={[
@@ -53,8 +62,8 @@ const {
         </button>
       ),
     )}
-    {nextUrl ? (
-      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={nextUrl}>{nextLabel}</a>
+    {next ? (
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={next}>{nextLabel}</a>
     ) : (
       <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{nextLabel}</button>
     )}

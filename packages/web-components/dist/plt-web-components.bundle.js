@@ -188,7 +188,7 @@ var v=(s,r)=>({fromAttribute(e){if(e===null||e==="")return r();try{return JSON.p
                 </li>`)}
             </ul>
             <button type="button" class="d-btn d-btn-sm d-btn-ghost theme-label-bold" @click=${()=>this._clear()}>${e.clear}</button>
-          </div>`:d}`}};ee.properties={filters:{type:Array,converter:v("plt-filter-bar",()=>[])},action:{type:String},method:{type:String},manual:{type:Boolean,reflect:!0},orientation:{type:String,reflect:!0},hideChips:{type:Boolean,attribute:"hide-chips",reflect:!0},labels:{type:Object,converter:v("plt-filter-bar",()=>({}))},preserve:{type:Object,converter:v("plt-filter-bar",()=>({}))},_values:{state:!0}};var yr={nav:"Pagination",previous:"Previous",next:"Next"},te=class extends b{constructor(){super(),this.pages=[],this.previousUrl="",this.nextUrl="",this.labels={}}createRenderRoot(){return this}connectedCallback(){super.connectedCallback(),$(this)}updated(){$(this)}_onClick(r,e,t){r.button!==0||r.metaKey||r.ctrlKey||r.shiftKey||r.altKey||_(this,Rt,{url:e,label:t},!0)||r.preventDefault()}_link(r,e,t){return u`<a
+          </div>`:d}`}};ee.properties={filters:{type:Array,converter:v("plt-filter-bar",()=>[])},action:{type:String},method:{type:String},manual:{type:Boolean,reflect:!0},orientation:{type:String,reflect:!0},hideChips:{type:Boolean,attribute:"hide-chips",reflect:!0},labels:{type:Object,converter:v("plt-filter-bar",()=>({}))},preserve:{type:Object,converter:v("plt-filter-bar",()=>({}))},_values:{state:!0}};var yr={nav:"Pagination",previous:"Previous",next:"Next"},te=class extends b{constructor(){super(),this.pages=[],this.previousUrl="",this.nextUrl="",this.labels={},this.variant=""}createRenderRoot(){return this}connectedCallback(){super.connectedCallback(),$(this)}updated(){$(this)}_onClick(r,e,t){r.button!==0||r.metaKey||r.ctrlKey||r.shiftKey||r.altKey||_(this,Rt,{url:e,label:t},!0)||r.preventDefault()}_link(r,e,t){return u`<a
       class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold"
       href=${r}
       aria-label=${t??e}
@@ -198,13 +198,13 @@ var v=(s,r)=>({fromAttribute(e){if(e===null||e==="")return r();try{return JSON.p
       type="button"
       aria-current=${e?"page":d}
       disabled
-    >${r}</button>`}render(){let r={...yr,...this.labels??{}};return u`<nav class="plt-pagination" aria-label=${r.nav}>
+    >${r}</button>`}render(){let r={...yr,...this.labels??{}},e=this.variant==="compact";return u`<nav class="plt-pagination${e?" plt-pagination--compact":""}" aria-label=${r.nav}>
       <div class="d-join">
         ${this.previousUrl?this._link(this.previousUrl,r.previous):this._inert(r.previous)}
-        ${(this.pages??[]).map(e=>e.url&&!e.current&&!e.disabled?this._link(e.url,e.label):this._inert(e.label,!!e.current))}
+        ${(this.pages??[]).map(t=>t.url&&!t.current&&!t.disabled?this._link(t.url,t.label):this._inert(t.label,!!t.current))}
         ${this.nextUrl?this._link(this.nextUrl,r.next):this._inert(r.next)}
       </div>
-    </nav>`}};te.properties={pages:{type:Array,converter:v("plt-pagination",()=>[])},previousUrl:{type:String,attribute:"previous-url"},nextUrl:{type:String,attribute:"next-url"},labels:{type:Object,converter:v("plt-pagination",()=>({}))}};var re=class extends b{constructor(){super();this._id=S("plt-sort");this.options=[],this.name="sort",this.label="Sort by",this.action="",this.method="get",this.manual=!1,this.applyLabel="Apply",this.preserve={},this._value=""}createRenderRoot(){return this}connectedCallback(){super.connectedCallback(),$(this)}get value(){return this._value}willUpdate(e){if(e.has("options")){let t=this.options??[];this._value=(t.find(i=>i.selected)??t[0])?.value??""}}updated(){$(this)}_change(e){this._value=e,_(this,kt,{name:this.name,value:e},!0)&&!this.manual&&this.querySelector(":scope > form:not([data-plt-fallback])")?.requestSubmit()}render(){return u`<form class="plt-sort-select" action=${this.action} method=${this.method||"get"}>
+    </nav>`}};te.properties={pages:{type:Array,converter:v("plt-pagination",()=>[])},previousUrl:{type:String,attribute:"previous-url"},nextUrl:{type:String,attribute:"next-url"},labels:{type:Object,converter:v("plt-pagination",()=>({}))},variant:{type:String,reflect:!0}};var re=class extends b{constructor(){super();this._id=S("plt-sort");this.options=[],this.name="sort",this.label="Sort by",this.action="",this.method="get",this.manual=!1,this.applyLabel="Apply",this.preserve={},this._value=""}createRenderRoot(){return this}connectedCallback(){super.connectedCallback(),$(this)}get value(){return this._value}willUpdate(e){if(e.has("options")){let t=this.options??[];this._value=(t.find(i=>i.selected)??t[0])?.value??""}}updated(){$(this)}_change(e){this._value=e,_(this,kt,{name:this.name,value:e},!0)&&!this.manual&&this.querySelector(":scope > form:not([data-plt-fallback])")?.requestSubmit()}render(){return u`<form class="plt-sort-select" action=${this.action} method=${this.method||"get"}>
       ${Ee(this.preserve).map(([e,t])=>u`<input type="hidden" name=${e} value=${t} />`)}
       <label class="theme-label-bold" for=${this._id}>${this.label}</label>
       <select

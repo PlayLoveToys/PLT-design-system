@@ -7,6 +7,8 @@ import { type PltPage, type PltPaginationLabels } from "./types.js";
  * client-routed frontends cancel it and navigate themselves, everyone else
  * gets a normal navigation. The current page is `aria-current="page"`.
  *
+ * Set `variant="compact"` for numbered store pagination (content-sized buttons).
+ *
  * @fires plt:page-change - cancelable; `{ url, label }`
  */
 export declare class PltPagination extends LitElement {
@@ -33,11 +35,16 @@ export declare class PltPagination extends LitElement {
                 toAttribute(value: unknown): string;
             };
         };
+        variant: {
+            type: StringConstructor;
+            reflect: boolean;
+        };
     };
     pages: PltPage[];
     previousUrl: string;
     nextUrl: string;
     labels: PltPaginationLabels;
+    variant: string;
     constructor();
     protected createRenderRoot(): this;
     connectedCallback(): void;
