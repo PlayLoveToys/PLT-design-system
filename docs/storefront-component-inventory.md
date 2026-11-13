@@ -120,7 +120,7 @@ The Astro home is a stub: Hero, FeaturedCollections, NewArrivals, PromoStrip, Ne
 | `cms-home-hero` | Use `Hero`. |
 | `cms-home-featured-collections` / `shop-by-need` | `SectionHeader` + `CollectionCard` + `ProductGrid`. |
 | `cms-home-product-carousel` | **Defined** `Carousel`: visual shell. Scroll and JS stay in the app. (Note: some Liquid sections named product-carousel are grids.) |
-| `cms-home-trust-bar` | **New** `TrustBar`: items `{ icon?, label, body? }`. |
+| `cms-home-trust-bar` | **Defined** `TrustBar`: items `{ icon?, label, body? }`. |
 | `cms-home-promo-gateway` | `EditorialCard` or `CollectionCard` in a grid. Do not add a fourth card type. |
 | `cms-home-editorial-intro` / `brand-story` | `SplitCta`. Already defined; unused on the storefront. |
 | `cms-home-education-hub` | `SectionHeader` + `EditorialCard`. |

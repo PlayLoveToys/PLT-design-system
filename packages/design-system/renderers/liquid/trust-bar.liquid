@@ -1,0 +1,16 @@
+{% comment %}
+  PLT TrustBar. items: [{ icon?, label, body? }]; optional heading.
+  icon is pre-sanitized HTML from the consumer.
+{% endcomment %}
+<section class="plt-trust-bar">
+  {% if heading != blank %}<h2 class="theme-headline-lg">{{ heading | escape }}</h2>{% endif %}
+  <ul class="plt-trust-bar__list">
+    {% for item in items %}
+      <li class="plt-trust-bar__item theme-bordered theme-elevated">
+        {% if item.icon != blank %}<div class="plt-trust-bar__icon">{{ item.icon }}</div>{% endif %}
+        <h3 class="theme-label-bold plt-trust-bar__label">{{ item.label | escape }}</h3>
+        {% if item.body != blank %}<p class="theme-meta">{{ item.body | escape }}</p>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</section>

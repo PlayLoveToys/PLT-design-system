@@ -105,6 +105,9 @@ const requiredEscapes = {
     "{{ prev_label | default: 'Previous' | escape }}",
     "{{ next_label | default: 'Next' | escape }}",
   ],
+  "renderers/liquid/trust-bar.liquid": [
+    "{{ item.label | escape }}",
+  ],
   "renderers/liquid/search-field.liquid": [
     "{{ placeholder | default: 'Search products' | escape }}",
   ],

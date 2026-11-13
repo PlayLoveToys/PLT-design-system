@@ -121,6 +121,8 @@ const required = {
   "renderers/liquid/location-card.liquid": ["d-card", "d-card-body", "d-card-title", "plt-media-card", "plt-location-card"],
   "renderers/astro/ui/Carousel.astro": ["d-btn", "plt-carousel"],
   "renderers/liquid/carousel.liquid": ["d-btn", "plt-carousel"],
+  "renderers/astro/editorial/TrustBar.astro": ["plt-trust-bar", "theme-bordered"],
+  "renderers/liquid/trust-bar.liquid": ["plt-trust-bar", "theme-bordered"],
   "renderers/astro/commerce/Price.astro": ["plt-price", "plt-product-card__price"],
   "renderers/astro/commerce/Stock.astro": ["plt-stock", "data-stock-state"],
   "renderers/astro/editorial/PageOutline.astro": ["plt-docs-toc"],

@@ -916,6 +916,18 @@ plt-quick-view dialog::backdrop {
 .plt-carousel__track > * { scroll-snap-align: start; flex: 0 0 auto; }
 .plt-carousel__nav { display: flex; gap: 0.5rem; }
 
+.plt-trust-bar { display: grid; gap: 1rem; }
+.plt-trust-bar__list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plt-trust-bar__item { display: grid; gap: 0.5rem; padding: 1rem; }
+.plt-trust-bar__label { margin: 0; }
+
 /* Collection filters & sort: a collapsible panel on small screens, always-open bar from 64rem. */
 .plt-collection-filters {
   display: grid;

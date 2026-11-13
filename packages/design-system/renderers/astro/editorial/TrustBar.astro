@@ -1,0 +1,29 @@
+---
+interface TrustItem {
+  icon?: string;
+  label: string;
+  body?: string;
+}
+
+interface Props {
+  items: TrustItem[];
+  heading?: string;
+}
+
+const { items = [], heading } = Astro.props;
+---
+
+<section class="plt-trust-bar">
+  {heading && <h2 class="theme-headline-lg">{heading}</h2>}
+  <ul class="plt-trust-bar__list">
+    {
+      items.map((item) => (
+        <li class="plt-trust-bar__item theme-bordered theme-elevated">
+          {item.icon && <div class="plt-trust-bar__icon" set:html={item.icon} />}
+          <h3 class="theme-label-bold plt-trust-bar__label">{item.label}</h3>
+          {item.body && <p class="theme-meta">{item.body}</p>}
+        </li>
+      ))
+    }
+  </ul>
+</section>

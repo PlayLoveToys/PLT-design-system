@@ -331,6 +331,14 @@ Optional: `heading`, `prev_label` (default Previous), `next_label` (default Next
 
 Visual shell only: `.plt-carousel` with a snap track (default slot / Liquid `slides` HTML) and presentational prev/next `d-btn d-btn-square` buttons (no click handlers). Scroll behaviour stays in the app.
 
+## TrustBar
+
+Required: `items` — array of `{ icon?, label, body? }` (`label` is the item heading/title).
+
+Optional: `heading` for the section.
+
+Anatomy: `.plt-trust-bar` grid of `.plt-trust-bar__item` (`theme-bordered`). `icon` is optional pre-sanitized HTML (Material Symbol markup, SVG, etc.). Mobile carousel behaviour stays in the app.
+
 ## EmptyState
 
 Required: `heading`.
