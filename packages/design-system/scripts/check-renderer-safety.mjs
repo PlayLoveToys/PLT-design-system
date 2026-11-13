@@ -50,6 +50,9 @@ const requiredEscapes = {
   "renderers/liquid/section-header.liquid": [
     "{{ title | escape }}",
   ],
+  "renderers/liquid/faq.liquid": [
+    "{{ item.question | escape }}",
+  ],
   "renderers/liquid/editorial-card.liquid": [
     "{{ url | escape }}",
     "{{ title | escape }}",

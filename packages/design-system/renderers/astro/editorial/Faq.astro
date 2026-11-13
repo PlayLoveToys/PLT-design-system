@@ -1,0 +1,27 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqItem[];
+  heading?: string;
+}
+
+const { items = [], heading } = Astro.props;
+---
+
+<section class="plt-faq">
+  {heading && <h2 class="theme-headline-lg">{heading}</h2>}
+  {
+    items.map((item) => (
+      <details class="d-collapse d-collapse-arrow theme-bordered">
+        <summary class="d-collapse-title theme-label-bold">{item.question}</summary>
+        <div class="d-collapse-content">
+          <div class="plt-prose" set:html={item.answer} />
+        </div>
+      </details>
+    ))
+  }
+</section>

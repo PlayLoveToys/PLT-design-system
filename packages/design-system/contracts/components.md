@@ -206,9 +206,19 @@ Opt-in capabilities, switched on by the markup that carries them (a frontend tha
 
 Style hooks: `plt-buy-bar` (sticky add-to-cart; set `data-visible="true"` to show it, children are the price and the add-to-cart `form`). It is `position: fixed`, so the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so it never covers the footer. Hidden from 64rem up.
 
-## Swatch, Faq and rich text
+## Faq
 
-Style hooks only. `plt-swatch` is a colour chip (set `background-color`, or put an `<img>` inside). `plt-faq` wraps stacked daisyUI `d-collapse` blocks. `plt-prose` styles Shopify/Tina rich text (headings, links, lists, images, blockquotes); themes may override its typography.
+Required: `items` — array of `{ question, answer }`.
+
+Optional: `heading` (section title above the list).
+
+`question` is plain text. `answer` is HTML already sanitized by the consumer (product FAQ / CMS richtext). The renderer does not sanitize.
+
+Anatomy: wrapper `.plt-faq`; each item is daisyUI `d-collapse d-collapse-arrow` with `d-collapse-title` and `d-collapse-content`. Native `<details>` / checkbox collapse — no app JS.
+
+## Swatch and rich text
+
+Style hooks only until their dedicated contracts land. `plt-swatch` is a colour chip (set `background-color`, or put an `<img>` inside). `plt-prose` styles Shopify/Tina rich text (headings, links, lists, images, blockquotes); themes may override its typography.
 
 ## OptionPicker
 

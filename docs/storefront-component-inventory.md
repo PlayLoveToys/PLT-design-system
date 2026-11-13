@@ -102,7 +102,7 @@ Visual units the storefront already uses on more than one surface, with no desig
 | `MarketSelector` | Market and locale switch | Storefront: `src/components/navigation/MarketSelector.astro`. UI only; market resolution stays in the app. |
 | `Price` | Price and compare-at | Storefront: `src/components/commerce/Price.astro`. Formatted strings only, same rule as `ProductCard`. |
 | `MediaGallery` | PDP and featured product | Gallery plus thumbnails. Scroll and Alpine stay outside. |
-| `Faq` | Canonical editorial block plus home and local pages | `faq` exists in `plt-editorial` and has no renderer. Compose `d-collapse` with `SectionHeader`. |
+| `Faq` | Canonical editorial block plus home and local pages | **Defined** — `d-collapse` under `.plt-faq`; Liquid + Astro renderers. |
 | `RichText` | `rich_text` block | Today a bare `div.plt-rich-text` in `packages/astro/src/BlockRenderer.astro`. Brand prose only, not a CMS. |
 | `AccountNav` | `/account/*` | Storefront: `src/components/account/AccountNav.astro`. Links arrive already resolved. |
 | `LocationCard` | Locations index | Storefront: `src/components/blocks/LocationCard.astro`. Media-card variant, not `CollectionCard`. |

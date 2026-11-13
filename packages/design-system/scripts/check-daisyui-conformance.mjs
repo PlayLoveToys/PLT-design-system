@@ -73,6 +73,8 @@ const required = {
   "renderers/liquid/promo-strip.liquid": ["d-btn"],
   "renderers/astro/editorial/SectionHeader.astro": ["d-badge", "theme-headline-lg", "plt-section-header"],
   "renderers/liquid/section-header.liquid": ["d-badge", "theme-headline-lg", "plt-section-header"],
+  "renderers/astro/editorial/Faq.astro": ["d-collapse", "d-collapse-arrow", "d-collapse-title", "d-collapse-content", "plt-faq"],
+  "renderers/liquid/faq.liquid": ["d-collapse", "d-collapse-arrow", "d-collapse-title", "d-collapse-content", "plt-faq"],
   "renderers/astro/editorial/EditorialCard.astro": ["d-card", "d-card-body", "d-card-title", "d-card-actions", "d-btn"],
   "renderers/liquid/editorial-card.liquid": ["d-card", "d-card-body", "d-card-title", "d-card-actions", "d-btn"],
   "renderers/astro/editorial/SplitCta.astro": ["d-btn", "d-badge", "plt-split-cta"],
