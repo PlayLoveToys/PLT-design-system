@@ -115,6 +115,8 @@ const required = {
   "renderers/liquid/pagination.liquid": ["d-join", "d-btn", "plt-pagination"],
   "renderers/astro/ui/EmptyState.astro": ["d-alert", "d-btn", "plt-empty-state"],
   "renderers/liquid/empty-state.liquid": ["d-alert", "d-btn", "plt-empty-state"],
+  "renderers/astro/ui/ChipPills.astro": ["d-badge", "plt-chip-pills"],
+  "renderers/liquid/chip-pills.liquid": ["d-badge", "plt-chip-pills"],
   "renderers/astro/commerce/Price.astro": ["plt-price", "plt-product-card__price"],
   "renderers/astro/commerce/Stock.astro": ["plt-stock", "data-stock-state"],
   "renderers/astro/editorial/PageOutline.astro": ["plt-docs-toc"],

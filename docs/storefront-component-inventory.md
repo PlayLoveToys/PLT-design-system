@@ -106,7 +106,7 @@ Visual units the storefront already uses on more than one surface, with no desig
 | `RichText` | `rich_text` block | **Defined** — `.plt-prose` wrapper; Liquid + Astro; BlockRenderer consumes it. |
 | `AccountNav` | `/account/*` | Storefront: `src/components/account/AccountNav.astro`. Links arrive already resolved. |
 | `LocationCard` | Locations index | Storefront: `src/components/blocks/LocationCard.astro`. Media-card variant, not `CollectionCard`. |
-| `ChipPills` | Collection pills, related terms, home nav | Liquid: `cms-nav-collection-pills`, `cms-related-term-pills`. Items: `{ label, url, current? }`. |
+| `ChipPills` | Collection pills, related terms, home nav | **Defined** — `{ label, url, current? }[]`; Liquid + Astro. |
 | `ListingToolbar` | Index chrome for products, blogs, glossary, and locations | Composes `SearchField`, `FilterBar`, `SortSelect`, and `Pagination` so `ListBrowser` does not copy layout. |
 
 Suggested implementation order when a contract is requested: `Price`, `Faq`, `RichText`, `MegaMenu`, `MarketSelector`, `MediaGallery`, `ChipPills`, `LocationCard`, `AccountNav`, `ListingToolbar`.

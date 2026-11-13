@@ -896,6 +896,14 @@ plt-quick-view dialog::backdrop {
   font-style: italic;
 }
 
+.plt-chip-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.plt-chip-pills .d-badge { text-decoration: none; }
+
 /* Collection filters & sort: a collapsible panel on small screens, always-open bar from 64rem. */
 .plt-collection-filters {
   display: grid;

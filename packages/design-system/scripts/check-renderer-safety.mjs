@@ -93,6 +93,10 @@ const requiredEscapes = {
   "renderers/liquid/empty-state.liquid": [
     "{{ heading | escape }}",
   ],
+  "renderers/liquid/chip-pills.liquid": [
+    "{{ item.url | escape }}",
+    "{{ item.label | escape }}",
+  ],
   "renderers/liquid/search-field.liquid": [
     "{{ placeholder | default: 'Search products' | escape }}",
   ],

@@ -311,6 +311,12 @@ Optional: `aria_label`, `prev_url`, `next_url`, `prev_label`, `next_label`, `com
 
 Interactive version: `<plt-pagination>` (`pages`, `previous-url`, `next-url`, `labels`, `variant="compact"`); links stay links; a plain click emits a cancelable `plt:page-change` (`{ url, label }`) so client-routed frontends can navigate themselves. Liquid/Astro adapters accept `compact` and `anchor` and map them onto the WC attributes and hrefs.
 
+## ChipPills
+
+Required: `items` — array of `{ label, url, current? }`.
+
+Row of link pills for collection / related-term navigation. Anatomy: `.plt-chip-pills` of `a.d-badge` (`d-badge-primary` + `aria-current="page"` when `current`). Overflow scrolling stays in the consumer if needed.
+
 ## EmptyState
 
 Required: `heading`.
