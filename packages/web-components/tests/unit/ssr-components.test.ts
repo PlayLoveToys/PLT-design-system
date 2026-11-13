@@ -201,6 +201,25 @@ describe("server rendering of every component", () => {
     expect(pageHtml).toContain('previous-url="/collections/all?page=1"');
     expect(pageHtml).toContain("<span>…</span>");
     expect(pageHtml).not.toContain("hellip");
+    expect(pageHtml).not.toContain('variant="compact"');
+
+    const compactHtml = await render(`${adapters}plt-pagination.liquid`, {
+      paginate,
+      compact: true,
+      anchor: "#Comments-123",
+    });
+    expect(compactHtml).toContain('variant="compact"');
+    expect(attribute(compactHtml, "pages")).toEqual([
+      { label: "1", url: "/collections/all?page=1#Comments-123", current: false, disabled: false },
+      { label: "2", url: null, current: true, disabled: false },
+      { label: "…", url: null, current: false, disabled: true },
+      { label: "9", url: "/collections/all?page=9#Comments-123", current: false, disabled: false },
+    ]);
+    expect(compactHtml).toContain('previous-url="/collections/all?page=1#Comments-123"');
+    expect(compactHtml).toContain('next-url="/collections/all?page=3#Comments-123"');
+    expect(compactHtml).toContain('href="/collections/all?page=1#Comments-123"');
+    expect(compactHtml).toContain('href="/collections/all?page=9#Comments-123"');
+    expect(compactHtml).toContain('href="/collections/all?page=3#Comments-123"');
   });
 
   it("Liquid: the Navbar renderer wraps <plt-navbar> and renders mega menus", async () => {

@@ -15,6 +15,8 @@ const DEFAULT_LABELS: Required<PltPaginationLabels> = {
  * client-routed frontends cancel it and navigate themselves, everyone else
  * gets a normal navigation. The current page is `aria-current="page"`.
  *
+ * Set `variant="compact"` for numbered store pagination (content-sized buttons).
+ *
  * @fires plt:page-change - cancelable; `{ url, label }`
  */
 export class PltPagination extends LitElement {
@@ -23,12 +25,14 @@ export class PltPagination extends LitElement {
     previousUrl: { type: String, attribute: "previous-url" },
     nextUrl: { type: String, attribute: "next-url" },
     labels: { type: Object, converter: jsonConverter("plt-pagination", () => ({})) },
+    variant: { type: String, reflect: true },
   };
 
   declare pages: PltPage[];
   declare previousUrl: string;
   declare nextUrl: string;
   declare labels: PltPaginationLabels;
+  declare variant: string;
 
   constructor() {
     super();
@@ -36,6 +40,7 @@ export class PltPagination extends LitElement {
     this.previousUrl = "";
     this.nextUrl = "";
     this.labels = {};
+    this.variant = "";
   }
 
   protected override createRenderRoot() {
@@ -77,7 +82,8 @@ export class PltPagination extends LitElement {
 
   protected override render() {
     const labels = { ...DEFAULT_LABELS, ...(this.labels ?? {}) };
-    return html`<nav class="plt-pagination" aria-label=${labels.nav}>
+    const compact = this.variant === "compact";
+    return html`<nav class="plt-pagination${compact ? " plt-pagination--compact" : ""}" aria-label=${labels.nav}>
       <div class="d-join">
         ${this.previousUrl ? this._link(this.previousUrl, labels.previous) : this._inert(labels.previous)}
         ${(this.pages ?? []).map((page) =>

@@ -1,14 +1,21 @@
 {% comment %} PLT Pagination renderer. {% endcomment %}
-<nav class="plt-pagination" aria-label="{{ aria_label | default: 'Pagination' | escape }}">
+{%- liquid
+  assign fragment = anchor | default: ''
+  assign nav_class = 'plt-pagination'
+  if compact
+    assign nav_class = nav_class | append: ' plt-pagination--compact'
+  endif
+-%}
+<nav class="{{ nav_class }}" aria-label="{{ aria_label | default: 'Pagination' | escape }}">
   <div class="d-join">
     {% if prev_url != blank %}
-      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ prev_url | escape }}">{{ prev_label | default: 'Previous' | escape }}</a>
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ prev_url | append: fragment | escape }}">{{ prev_label | default: 'Previous' | escape }}</a>
     {% else %}
       <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{{ prev_label | default: 'Previous' | escape }}</button>
     {% endif %}
     {% for page in pages %}
       {% if page.url != blank and page.current != true and page.disabled != true %}
-        <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ page.url | escape }}">{{ page.label | escape }}</a>
+        <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ page.url | append: fragment | escape }}">{{ page.label | escape }}</a>
       {% else %}
         <button
           class="d-btn d-join-item theme-bordered theme-label-bold{% if page.current %} d-btn-primary{% else %} d-btn-outline{% endif %}{% if page.disabled %} d-btn-disabled{% endif %}"
@@ -19,7 +26,7 @@
       {% endif %}
     {% endfor %}
     {% if next_url != blank %}
-      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ next_url | escape }}">{{ next_label | default: 'Next' | escape }}</a>
+      <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ next_url | append: fragment | escape }}">{{ next_label | default: 'Next' | escape }}</a>
     {% else %}
       <button class="d-btn d-btn-outline d-join-item theme-bordered d-btn-disabled" type="button" disabled>{{ next_label | default: 'Next' | escape }}</button>
     {% endif %}

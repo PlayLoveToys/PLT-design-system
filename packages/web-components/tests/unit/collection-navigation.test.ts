@@ -511,6 +511,15 @@ describe("<plt-sort-select> and <plt-pagination>", () => {
     element.querySelectorAll("a")[2].dispatchEvent(modified);
     expect(modified.defaultPrevented).toBe(false);
   });
+
+  it("pagination: variant=compact adds plt-pagination--compact", async () => {
+    document.body.innerHTML = '<plt-pagination variant="compact"></plt-pagination>';
+    const element = document.querySelector("plt-pagination")!;
+    element.pages = [{ label: "1", current: true }, { label: "2", url: "?page=2" }];
+    await flush(element);
+    expect(element.getAttribute("variant")).toBe("compact");
+    expect(element.querySelector("nav")!.classList.contains("plt-pagination--compact")).toBe(true);
+  });
 });
 
 describe("<plt-navbar>", () => {

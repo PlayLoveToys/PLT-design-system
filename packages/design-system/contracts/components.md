@@ -274,9 +274,12 @@ Optional: `action`, `method`, `input_name`, `placeholder`, `value`, `submit_labe
 
 Required: `pages` — array of `{ label, url?, current?, disabled? }`.
 
-Optional: `aria_label`, `prev_url`, `next_url`, `prev_label`, `next_label`.
+Optional: `aria_label`, `prev_url`, `next_url`, `prev_label`, `next_label`, `compact`, `anchor`.
 
-Interactive version: `<plt-pagination>` (`pages`, `previous-url`, `next-url`, `labels`); links stay links; a plain click emits a cancelable `plt:page-change` (`{ url, label }`) so client-routed frontends can navigate themselves.
+- `compact` — numbered store pagination; adds `plt-pagination--compact` for content-sized join buttons (default remains the full-title doc layout).
+- `anchor` — optional URL fragment (e.g. `#Comments-123`) appended to every link (`pages[].url`, `prev_url` / `next_url`, and fallback links).
+
+Interactive version: `<plt-pagination>` (`pages`, `previous-url`, `next-url`, `labels`, `variant="compact"`); links stay links; a plain click emits a cancelable `plt:page-change` (`{ url, label }`) so client-routed frontends can navigate themselves. Liquid/Astro adapters accept `compact` and `anchor` and map them onto the WC attributes and hrefs.
 
 ## EmptyState
 

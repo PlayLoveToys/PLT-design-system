@@ -822,6 +822,16 @@ plt-quick-view dialog::backdrop {
   text-align: center;
   padding-block: 0.625rem;
 }
+/* Numbered store pagination: content-sized join items that still wrap. */
+.plt-pagination--compact .d-join {
+  width: auto;
+}
+.plt-pagination--compact .d-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  min-width: var(--size);
+  padding-inline: 0.75rem;
+}
 .plt-empty-state {
   display: grid;
   gap: 1rem;

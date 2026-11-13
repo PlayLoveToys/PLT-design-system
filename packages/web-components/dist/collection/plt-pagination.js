@@ -13,6 +13,7 @@ class PltPagination extends LitElement {
     this.previousUrl = "";
     this.nextUrl = "";
     this.labels = {};
+    this.variant = "";
   }
   createRenderRoot() {
     return this;
@@ -46,7 +47,8 @@ class PltPagination extends LitElement {
   }
   render() {
     const labels = { ...DEFAULT_LABELS, ...this.labels ?? {} };
-    return html`<nav class="plt-pagination" aria-label=${labels.nav}>
+    const compact = this.variant === "compact";
+    return html`<nav class="plt-pagination${compact ? " plt-pagination--compact" : ""}" aria-label=${labels.nav}>
       <div class="d-join">
         ${this.previousUrl ? this._link(this.previousUrl, labels.previous) : this._inert(labels.previous)}
         ${(this.pages ?? []).map(
@@ -61,7 +63,8 @@ PltPagination.properties = {
   pages: { type: Array, converter: jsonConverter("plt-pagination", () => []) },
   previousUrl: { type: String, attribute: "previous-url" },
   nextUrl: { type: String, attribute: "next-url" },
-  labels: { type: Object, converter: jsonConverter("plt-pagination", () => ({})) }
+  labels: { type: Object, converter: jsonConverter("plt-pagination", () => ({})) },
+  variant: { type: String, reflect: true }
 };
 export {
   PltPagination
