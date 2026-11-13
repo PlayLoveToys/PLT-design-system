@@ -103,7 +103,7 @@ Visual units the storefront already uses on more than one surface, with no desig
 | `Price` | Price and compare-at | Storefront: `src/components/commerce/Price.astro`. Formatted strings only, same rule as `ProductCard`. |
 | `MediaGallery` | PDP and featured product | Gallery plus thumbnails. Scroll and Alpine stay outside. |
 | `Faq` | Canonical editorial block plus home and local pages | **Defined** — `d-collapse` under `.plt-faq`; Liquid + Astro renderers. |
-| `RichText` | `rich_text` block | Today a bare `div.plt-rich-text` in `packages/astro/src/BlockRenderer.astro`. Brand prose only, not a CMS. |
+| `RichText` | `rich_text` block | **Defined** — `.plt-prose` wrapper; Liquid + Astro; BlockRenderer consumes it. |
 | `AccountNav` | `/account/*` | Storefront: `src/components/account/AccountNav.astro`. Links arrive already resolved. |
 | `LocationCard` | Locations index | Storefront: `src/components/blocks/LocationCard.astro`. Media-card variant, not `CollectionCard`. |
 | `ChipPills` | Collection pills, related terms, home nav | Liquid: `cms-nav-collection-pills`, `cms-related-term-pills`. Items: `{ label, url, current? }`. |

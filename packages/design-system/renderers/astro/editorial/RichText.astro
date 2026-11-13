@@ -1,0 +1,18 @@
+---
+interface Props {
+  /** Pre-sanitized HTML from the consumer. Prefer the default slot when possible. */
+  body?: string;
+}
+
+const { body } = Astro.props;
+---
+
+{
+  body ? (
+    <div class="plt-prose" set:html={body} />
+  ) : (
+    <div class="plt-prose">
+      <slot />
+    </div>
+  )
+}

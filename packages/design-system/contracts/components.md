@@ -216,9 +216,15 @@ Optional: `heading` (section title above the list).
 
 Anatomy: wrapper `.plt-faq`; each item is daisyUI `d-collapse d-collapse-arrow` with `d-collapse-title` and `d-collapse-content`. Native `<details>` / checkbox collapse — no app JS.
 
-## Swatch and rich text
+## RichText
 
-Style hooks only until their dedicated contracts land. `plt-swatch` is a colour chip (set `background-color`, or put an `<img>` inside). `plt-prose` styles Shopify/Tina rich text (headings, links, lists, images, blockquotes); themes may override its typography.
+Optional: `body` — HTML already sanitized by the consumer.
+
+Brand prose wrapper (`.plt-prose`). Not a CMS runtime: the consumer passes already-rendered HTML (or, in Astro, a default slot). Themes may override typography via tokens.
+
+## Swatch
+
+Style hook only until its dedicated contract lands. `plt-swatch` is a colour chip (set `background-color`, or put an `<img>` inside).
 
 ## OptionPicker
 

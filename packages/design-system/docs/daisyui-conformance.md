@@ -26,6 +26,7 @@ Supported baseline: daisyUI `>=5.7.8 <6` with Tailwind CSS `>=4 <5`.
 | Cart drawer | `d-drawer` + `d-drawer-toggle` + `d-drawer-side` |
 | Join groups (qty, pagination) | `d-join` |
 | FAQ | `d-collapse` + `d-collapse-arrow` / title / content inside `.plt-faq` |
+| Rich text | `.plt-prose` (PLT composition; no daisyUI prose part) |
 | Docs nav tree | `d-menu` inside `plt-docs-nav-tree` |
 | Docs page outline | `plt-docs-toc` with native `details` / chevron (`plt-docs-toc__*`); no daisyUI TOC part |
 | Editorial docs shell | `plt-editorial-shell` grid + sticky columns; app owns document header/footer |
