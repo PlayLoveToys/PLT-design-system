@@ -101,6 +101,10 @@ const requiredEscapes = {
     "{{ url | escape }}",
     "{{ title | escape }}",
   ],
+  "renderers/liquid/carousel.liquid": [
+    "{{ prev_label | default: 'Previous' | escape }}",
+    "{{ next_label | default: 'Next' | escape }}",
+  ],
   "renderers/liquid/search-field.liquid": [
     "{{ placeholder | default: 'Search products' | escape }}",
   ],

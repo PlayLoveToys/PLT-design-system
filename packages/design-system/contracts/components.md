@@ -325,6 +325,12 @@ Optional: `image_url`, `image_alt`, `description`, `meta` (city/region line).
 
 Locations index media-card — not `CollectionCard`. Anatomy: `d-card` + `.plt-media-card` + `.plt-location-card`.
 
+## Carousel
+
+Optional: `heading`, `prev_label` (default Previous), `next_label` (default Next).
+
+Visual shell only: `.plt-carousel` with a snap track (default slot / Liquid `slides` HTML) and presentational prev/next `d-btn d-btn-square` buttons (no click handlers). Scroll behaviour stays in the app.
+
 ## EmptyState
 
 Required: `heading`.

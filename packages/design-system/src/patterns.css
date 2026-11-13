@@ -904,6 +904,18 @@ plt-quick-view dialog::backdrop {
 }
 .plt-chip-pills .d-badge { text-decoration: none; }
 
+.plt-carousel { display: grid; gap: 1rem; }
+.plt-carousel__viewport { overflow: hidden; }
+.plt-carousel__track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.plt-carousel__track > * { scroll-snap-align: start; flex: 0 0 auto; }
+.plt-carousel__nav { display: flex; gap: 0.5rem; }
+
 /* Collection filters & sort: a collapsible panel on small screens, always-open bar from 64rem. */
 .plt-collection-filters {
   display: grid;
