@@ -42,26 +42,8 @@
       </ul>
       {% for link in links %}
         {% if link.columns.size > 0 %}
-          <div class="plt-megamenu" id="plt-megamenu-{{ forloop.index0 }}" data-open="false" role="region" aria-label="{{ link.label | escape }}">
-            <div class="plt-megamenu__inner">
-              {% for column in link.columns %}
-                <div class="plt-megamenu__column">
-                  {% if column.url != blank %}
-                    <a class="plt-megamenu__title theme-label-bold" href="{{ column.url | escape }}">{{ column.title | escape }}</a>
-                  {% else %}
-                    <span class="plt-megamenu__title theme-label-bold">{{ column.title | escape }}</span>
-                  {% endif %}
-                  {% if column.children.size > 0 %}
-                    <ul class="plt-megamenu__list">
-                      {% for child in column.children %}
-                        <li><a class="plt-megamenu__link" href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.label | escape }}</a></li>
-                      {% endfor %}
-                    </ul>
-                  {% endif %}
-                </div>
-              {% endfor %}
-            </div>
-          </div>
+          {% assign megamenu_id = 'plt-megamenu-' | append: forloop.index0 %}
+          {% include 'megamenu', id: megamenu_id, label: link.label, columns: link.columns %}
         {% endif %}
       {% endfor %}
     </div>

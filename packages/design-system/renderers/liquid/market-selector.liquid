@@ -1,0 +1,48 @@
+{% comment %}
+  PLT MarketSelector. Props: countries, languages (arrays of { label, url, current? }),
+  optional country_aria_label, language_aria_label, current_language_label.
+{% endcomment %}
+{%- liquid
+  assign country_label = country_aria_label | default: 'Select country'
+  assign language_label = language_aria_label | default: 'Select language'
+  assign summary_language = current_language_label
+  if summary_language == blank
+    for lang in languages
+      if lang.current
+        assign summary_language = lang.label
+        break
+      endif
+    endfor
+  endif
+  if summary_language == blank and languages.size > 0
+    assign summary_language = languages.first.label
+  endif
+  assign summary_country = ''
+  for country in countries
+    if country.current
+      assign summary_country = country.label
+      break
+    endif
+  endfor
+  if summary_country == blank and countries.size > 0
+    assign summary_country = countries.first.label
+  endif
+-%}
+<div class="plt-market-selector">
+  <details class="d-dropdown d-dropdown-end">
+    <summary class="d-badge d-badge-ghost plt-market-selector__summary" aria-label="{{ country_label | escape }}">{{ summary_country | escape }}</summary>
+    <ul class="d-menu d-dropdown-content bg-base-200 rounded-box z-[110] mt-2 w-44 p-2 shadow">
+      {% for country in countries %}
+        <li><a href="{{ country.url | escape }}"{% if country.current %} aria-current="true"{% endif %}>{{ country.label | escape }}</a></li>
+      {% endfor %}
+    </ul>
+  </details>
+  <details class="d-dropdown d-dropdown-end">
+    <summary class="d-badge d-badge-ghost plt-market-selector__summary" aria-label="{{ language_label | escape }}">{{ summary_language | escape }}</summary>
+    <ul class="d-menu d-dropdown-content bg-base-200 rounded-box z-[110] mt-2 w-28 p-2 shadow">
+      {% for language in languages %}
+        <li><a href="{{ language.url | escape }}"{% if language.current %} aria-current="true"{% endif %}>{{ language.label | escape }}</a></li>
+      {% endfor %}
+    </ul>
+  </details>
+</div>

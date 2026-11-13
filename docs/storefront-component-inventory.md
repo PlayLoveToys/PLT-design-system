@@ -98,15 +98,15 @@ Visual units the storefront already uses on more than one surface, with no desig
 
 | Component | Used for | Notes |
 | --- | --- | --- |
-| `MegaMenu` | Desktop collections menu | Storefront: `src/components/navigation/CollectionsMegaMenu.astro`. Liquid: `mega-menu-panel`. Injected as a Navbar slot, not a second navbar. |
-| `MarketSelector` | Market and locale switch | Storefront: `src/components/navigation/MarketSelector.astro`. UI only; market resolution stays in the app. |
+| `MegaMenu` | Desktop collections menu | **Defined** — standalone Liquid/Astro renderers; Navbar includes them. Text columns only. |
+| `MarketSelector` | Market and locale switch | **Defined** — Liquid/Astro; UI only; market resolution stays in the app. |
 | `Price` | Price and compare-at | Storefront: `src/components/commerce/Price.astro`. Formatted strings only, same rule as `ProductCard`. |
 | `MediaGallery` | PDP and featured product | Gallery plus thumbnails. Scroll and Alpine stay outside. |
-| `Faq` | Canonical editorial block plus home and local pages | `faq` exists in `plt-editorial` and has no renderer. Compose `d-collapse` with `SectionHeader`. |
-| `RichText` | `rich_text` block | Today a bare `div.plt-rich-text` in `packages/astro/src/BlockRenderer.astro`. Brand prose only, not a CMS. |
+| `Faq` | Canonical editorial block plus home and local pages | **Defined** — `d-collapse` under `.plt-faq`; Liquid + Astro renderers. |
+| `RichText` | `rich_text` block | **Defined** — `.plt-prose` wrapper; Liquid + Astro; BlockRenderer consumes it. |
 | `AccountNav` | `/account/*` | Storefront: `src/components/account/AccountNav.astro`. Links arrive already resolved. |
-| `LocationCard` | Locations index | Storefront: `src/components/blocks/LocationCard.astro`. Media-card variant, not `CollectionCard`. |
-| `ChipPills` | Collection pills, related terms, home nav | Liquid: `cms-nav-collection-pills`, `cms-related-term-pills`. Items: `{ label, url, current? }`. |
+| `LocationCard` | Locations index | **Defined** — media-card (`plt-location-card`); not `CollectionCard`. |
+| `ChipPills` | Collection pills, related terms, home nav | **Defined** — `{ label, url, current? }[]`; Liquid + Astro. |
 | `ListingToolbar` | Index chrome for products, blogs, glossary, and locations | Composes `SearchField`, `FilterBar`, `SortSelect`, and `Pagination` so `ListBrowser` does not copy layout. |
 
 Suggested implementation order when a contract is requested: `Price`, `Faq`, `RichText`, `MegaMenu`, `MarketSelector`, `MediaGallery`, `ChipPills`, `LocationCard`, `AccountNav`, `ListingToolbar`.
@@ -119,14 +119,14 @@ The Astro home is a stub: Hero, FeaturedCollections, NewArrivals, PromoStrip, Ne
 | --- | --- |
 | `cms-home-hero` | Use `Hero`. |
 | `cms-home-featured-collections` / `shop-by-need` | `SectionHeader` + `CollectionCard` + `ProductGrid`. |
-| `cms-home-product-carousel` | **New** `Carousel`: visual shell. Scroll and JS stay in the app. |
-| `cms-home-trust-bar` | **New** `TrustBar`: items `{ icon?, label, body? }`. |
+| `cms-home-product-carousel` | **Defined** `Carousel`: visual shell. Scroll and JS stay in the app. (Note: some Liquid sections named product-carousel are grids.) |
+| `cms-home-trust-bar` | **Defined** `TrustBar`: items `{ icon?, label, body? }`. |
 | `cms-home-promo-gateway` | `EditorialCard` or `CollectionCard` in a grid. Do not add a fourth card type. |
 | `cms-home-editorial-intro` / `brand-story` | `SplitCta`. Already defined; unused on the storefront. |
 | `cms-home-education-hub` | `SectionHeader` + `EditorialCard`. |
 | `cms-home-market-block` | `SplitCta` or `PromoStrip`. Decide when implementing that section. |
 | `cms-home-faq` | `Faq` (see the required list). |
-| `cms-home-link-grid` | **New** `LinkGrid`: link columns, reusable on home and 404. Closely related to footer columns. |
+| `cms-home-link-grid` | **Defined** `LinkGrid`: link columns, reusable on home and 404. Closely related to footer columns. |
 | PDP trust badges | Optional `TrustBadges`, or `ChipPills` plus icons. |
 | `newsletter` | Use `Newsletter`. |
 
@@ -134,9 +134,9 @@ PDP visuals present in Liquid and missing from the Astro product page, still reu
 
 | Component | Role |
 | --- | --- |
-| `StickyAddToCart` | Fixed bar. Slots for `Price`, quantity, and the add button. |
+| `StickyAddToCart` | **Defined** — `.plt-buy-bar` fixed bar; slots for price/ATC; visibility in the app. |
 | `ReviewStars` | `d-rating` plus a label. Review data stays outside. |
-| `Swatch` | Color or image presentation only. Availability and variant resolution stay outside. |
+| `Swatch` | **Defined** — colour/image chip (`.plt-swatch`); availability stays outside. |
 | `PredictiveSearch` | Results panel for `SearchField`. The Astro site does not have this yet. |
 | `QuickAddModal` | `d-modal` plus a compact `ProductDetail`. |
 

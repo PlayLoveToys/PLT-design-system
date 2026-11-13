@@ -1,0 +1,40 @@
+---
+export interface MegaMenuColumn {
+  title: string;
+  url?: string;
+  children: Array<{ label: string; url: string; current?: boolean }>;
+}
+
+interface Props {
+  id: string;
+  label: string;
+  columns: MegaMenuColumn[];
+}
+
+const { id, label, columns = [] } = Astro.props;
+---
+
+<div class="plt-megamenu" id={id} data-open="false" role="region" aria-label={label}>
+  <div class="plt-megamenu__inner">
+    {
+      columns.map((column) => (
+        <div class="plt-megamenu__column">
+          {column.url ? (
+            <a class="plt-megamenu__title theme-label-bold" href={column.url}>{column.title}</a>
+          ) : (
+            <span class="plt-megamenu__title theme-label-bold">{column.title}</span>
+          )}
+          {column.children.length > 0 && (
+            <ul class="plt-megamenu__list">
+              {column.children.map((child) => (
+                <li>
+                  <a class="plt-megamenu__link" href={child.url} aria-current={child.current ? "page" : undefined}>{child.label}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</div>

@@ -1,0 +1,10 @@
+{% comment %} PLT ChipPills. items: [{ label, url, current? }] {% endcomment %}
+<nav class="plt-chip-pills" aria-label="Pills">
+  {% for item in items %}
+    <a
+      class="d-badge theme-bordered{% if item.current %} d-badge-primary{% else %} d-badge-outline{% endif %}"
+      href="{{ item.url | escape }}"
+      {% if item.current %}aria-current="page"{% endif %}
+    >{{ item.label | escape }}</a>
+  {% endfor %}
+</nav>

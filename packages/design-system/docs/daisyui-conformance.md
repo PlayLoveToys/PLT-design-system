@@ -22,9 +22,19 @@ Supported baseline: daisyUI `>=5.7.8 <6` with Tailwind CSS `>=4 <5`.
 | Breadcrumbs | `d-breadcrumbs` |
 | Navbar | `d-navbar` + `d-menu` |
 | MegaMenu | `plt-megamenu` panel inside `d-navbar`; lists follow `d-menu` spacing, links use `theme-*` type |
+| Market selector | `d-dropdown` + `d-badge` + `d-menu` inside `.plt-market-selector` |
 | Footer | `d-footer` + `d-menu` |
 | Cart drawer | `d-drawer` + `d-drawer-toggle` + `d-drawer-side` |
 | Join groups (qty, pagination) | `d-join` |
+| FAQ | `d-collapse` + `d-collapse-arrow` / title / content inside `.plt-faq` |
+| Rich text | `.plt-prose` (PLT composition; no daisyUI prose part) |
+| Chip pills | `d-badge` links inside `.plt-chip-pills` |
+| Location card | `d-card` + `.plt-media-card` / `.plt-location-card` |
+| Carousel | `.plt-carousel` track + `d-btn d-btn-square` nav (scroll in app) |
+| Trust bar | `.plt-trust-bar` items with `theme-bordered` |
+| Link grid | `.plt-link-grid` columns + `d-menu` (same shape as Footer columns) |
+| Sticky add to cart | `.plt-buy-bar` fixed bar (visibility in app) |
+| Swatch | `.plt-swatch` colour/image chip |
 | Docs nav tree | `d-menu` inside `plt-docs-nav-tree` |
 | Docs page outline | `plt-docs-toc` with native `details` / chevron (`plt-docs-toc__*`); no daisyUI TOC part |
 | Editorial docs shell | `plt-editorial-shell` grid + sticky columns; app owns document header/footer |

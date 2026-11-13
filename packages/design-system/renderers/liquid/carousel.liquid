@@ -1,0 +1,14 @@
+{% comment %}
+  PLT Carousel shell. Optional heading, prev_label, next_label.
+  Pass slide markup as `slides` (HTML string / capture). No scroll JS.
+{% endcomment %}
+<section class="plt-carousel">
+  {% if heading != blank %}<h2 class="theme-headline-lg plt-carousel__heading">{{ heading | escape }}</h2>{% endif %}
+  <div class="plt-carousel__viewport">
+    <div class="plt-carousel__track">{{ slides }}</div>
+  </div>
+  <div class="plt-carousel__nav">
+    <button type="button" class="d-btn d-btn-square d-btn-outline theme-bordered" aria-label="{{ prev_label | default: 'Previous' | escape }}">{{ prev_label | default: 'Previous' | escape }}</button>
+    <button type="button" class="d-btn d-btn-square d-btn-outline theme-bordered" aria-label="{{ next_label | default: 'Next' | escape }}">{{ next_label | default: 'Next' | escape }}</button>
+  </div>
+</section>

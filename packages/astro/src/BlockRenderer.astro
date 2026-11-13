@@ -3,6 +3,7 @@ import type { EditorialBlock } from "@playlovetoys/editorial";
 import Hero from "@playlovetoys/design-system/renderers/astro/Hero.astro";
 import PromoStrip from "@playlovetoys/design-system/renderers/astro/PromoStrip.astro";
 import Newsletter from "@playlovetoys/design-system/renderers/astro/Newsletter.astro";
+import RichText from "@playlovetoys/design-system/renderers/astro/RichText.astro";
 
 interface Props {
   block: EditorialBlock;
@@ -42,7 +43,7 @@ const { block } = Astro.props;
 )}
 
 {block.type === "rich_text" && (
-  <div class="plt-rich-text">{block.body}</div>
+  <RichText body={block.body} />
 )}
 
 {block.type === "product_grid" && (

@@ -136,11 +136,23 @@ Keyboard in More: Enter/Space on the button toggles; ArrowDown/ArrowUp/Home/End 
 
 ## MegaMenu
 
-Panel shown under a `Navbar` link whose menu item has grandchildren. Text columns only; images and featured products are not part of the contract.
+Panel shown under a `Navbar` link whose menu item has grandchildren. Text columns only; images and featured products are not part of the contract (theme-only extensions stay in the consumer).
 
-Required: `id`, `label`, `columns` — array of `{ title, url, children }` where `children` is an array of `{ label, url, current? }`.
+Required: `id`, `label`, `columns` — array of `{ title, url?, children }` where `children` is an array of `{ label, url, current? }`.
 
-The panel lives inside the sticky `.plt-navbar` (`.plt-megamenu`, `data-open="true|false"`); anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`. Its trigger is the top-level link with `aria-haspopup="true"`, `aria-expanded` and `aria-controls` (or `[data-plt-megamenu-trigger]`). `<plt-navbar>` owns the behaviour: open on hover or focus, ArrowDown into the panel, close after leaving trigger and panel (150 ms), on focus leaving or on following a link, Escape closes and returns focus; one panel open at a time. The Navbar renderers emit the anatomy from `links[].columns`.
+Standalone renderers: Astro `MegaMenu.astro`, Liquid `megamenu.liquid`. The Navbar renderers include them from `links[].columns`.
+
+The panel lives inside the sticky `.plt-navbar` (`.plt-megamenu`, `data-open="true|false"`); anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`. Its trigger is the top-level link with `aria-haspopup="true"`, `aria-expanded` and `aria-controls` (or `[data-plt-megamenu-trigger]`). `<plt-navbar>` owns the behaviour: open on hover or focus, ArrowDown into the panel, close after leaving trigger and panel (150 ms), on focus leaving or on following a link, Escape closes and returns focus; one panel open at a time.
+
+## MarketSelector
+
+Market and locale switch UI only. URL building, `{% form 'localization' %}`, and market resolution stay in the consumer.
+
+Required: `countries` — array of `{ label, url, current? }`; `languages` — array of `{ label, url, current? }`.
+
+Optional: `country_aria_label`, `language_aria_label`, `current_language_label` (summary text for the language control; defaults to the current language's `label`).
+
+Anatomy: `.plt-market-selector` with two native `details.d-dropdown` panels (`d-menu d-dropdown-content`, `d-badge` summaries). Links are plain `<a href>` — no app JS.
 
 ## Footer
 
@@ -204,11 +216,40 @@ Opt-in capabilities, switched on by the markup that carries them (a frontend tha
 | `[data-plt-gallery-thumb-track]`, `[data-plt-gallery-thumbs-prev]`, `[data-plt-gallery-thumbs-next]` | The track scrolls the selected thumbnail into view (it never scrolls the page); the buttons page it by one thumbnail. |
 
 
-Style hooks: `plt-buy-bar` (sticky add-to-cart; set `data-visible="true"` to show it, children are the price and the add-to-cart `form`). It is `position: fixed`, so the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so it never covers the footer. Hidden from 64rem up.
+See **StickyAddToCart** for the fixed buy bar (formerly documented only as the `plt-buy-bar` style hook).
 
-## Swatch, Faq and rich text
+## Faq
 
-Style hooks only. `plt-swatch` is a colour chip (set `background-color`, or put an `<img>` inside). `plt-faq` wraps stacked daisyUI `d-collapse` blocks. `plt-prose` styles Shopify/Tina rich text (headings, links, lists, images, blockquotes); themes may override its typography.
+Required: `items` — array of `{ question, answer }`.
+
+Optional: `heading` (section title above the list).
+
+`question` is plain text. `answer` is HTML already sanitized by the consumer (product FAQ / CMS richtext). The renderer does not sanitize.
+
+Anatomy: wrapper `.plt-faq`; each item is daisyUI `d-collapse d-collapse-arrow` with `d-collapse-title` and `d-collapse-content`. Native `<details>` / checkbox collapse — no app JS.
+
+## RichText
+
+Optional: `body` — HTML already sanitized by the consumer.
+
+Brand prose wrapper (`.plt-prose`). Not a CMS runtime: the consumer passes already-rendered HTML (or, in Astro, a default slot). Themes may override typography via tokens.
+
+## StickyAddToCart
+
+Optional: `visible` (boolean; sets `data-visible="true"` when true).
+
+Fixed bottom bar for phones/tablets (`.plt-buy-bar`). Children / slots:
+
+- Astro: default slot (typically price + ATC form); optional named slots are not required in v1.
+- Liquid: `content` HTML (price + form), pre-assembled by the consumer.
+
+Stacking: `position: fixed` at `z-index: 30` — the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so the bar never covers the footer. Hidden from 64rem up. Scroll visibility / shake / price sync stay in the app.
+
+## Swatch
+
+Optional: `color` (CSS colour for `background-color`), `image_url`, `image_alt`, `label` (accessible name), `size` (`sm` | `md`, default `md`).
+
+Colour or image presentation only. Availability and variant selection stay outside (OptionPicker / VariantPicker). Anatomy: `.plt-swatch` (`.plt-swatch--sm` when `size` is `sm`).
 
 ## OptionPicker
 
@@ -282,6 +323,42 @@ Optional: `aria_label`, `prev_url`, `next_url`, `prev_label`, `next_label`, `com
 - `anchor` — optional URL fragment (e.g. `#Comments-123`) appended to every link (`pages[].url`, `prev_url` / `next_url`, and fallback links).
 
 Interactive version: `<plt-pagination>` (`pages`, `previous-url`, `next-url`, `labels`, `variant="compact"`); links stay links; a plain click emits a cancelable `plt:page-change` (`{ url, label }`) so client-routed frontends can navigate themselves. Liquid/Astro adapters accept `compact` and `anchor` and map them onto the WC attributes and hrefs.
+
+## ChipPills
+
+Required: `items` — array of `{ label, url, current? }`.
+
+Row of link pills for collection / related-term navigation. Anatomy: `.plt-chip-pills` of `a.d-badge` (`d-badge-primary` + `aria-current="page"` when `current`). Overflow scrolling stays in the consumer if needed.
+
+## LocationCard
+
+Required: `title`, `url`.
+
+Optional: `image_url`, `image_alt`, `description`, `meta` (city/region line).
+
+Locations index media-card — not `CollectionCard`. Anatomy: `d-card` + `.plt-media-card` + `.plt-location-card`.
+
+## Carousel
+
+Optional: `heading`, `prev_label` (default Previous), `next_label` (default Next).
+
+Visual shell only: `.plt-carousel` with a snap track (default slot / Liquid `slides` HTML) and presentational prev/next `d-btn d-btn-square` buttons (no click handlers). Scroll behaviour stays in the app.
+
+## TrustBar
+
+Required: `items` — array of `{ icon?, label, body? }` (`label` is the item heading/title).
+
+Optional: `heading` for the section.
+
+Anatomy: `.plt-trust-bar` grid of `.plt-trust-bar__item` (`theme-bordered`). `icon` is optional pre-sanitized HTML (Material Symbol markup, SVG, etc.). Mobile carousel behaviour stays in the app.
+
+## LinkGrid
+
+Optional: `heading`.
+
+Required: `columns` — array of `{ title?, links: [{ label, url }] }` (same link-column shape as Footer).
+
+Reusable on home and 404. Anatomy: `.plt-link-grid` of columns with `theme-headline-sm` titles and `d-menu` link lists.
 
 ## EmptyState
 

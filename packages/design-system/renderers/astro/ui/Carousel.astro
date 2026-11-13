@@ -1,0 +1,22 @@
+---
+interface Props {
+  heading?: string;
+  prevLabel?: string;
+  nextLabel?: string;
+}
+
+const { heading, prevLabel = "Previous", nextLabel = "Next" } = Astro.props;
+---
+
+<section class="plt-carousel">
+  {heading && <h2 class="theme-headline-lg plt-carousel__heading">{heading}</h2>}
+  <div class="plt-carousel__viewport">
+    <div class="plt-carousel__track">
+      <slot />
+    </div>
+  </div>
+  <div class="plt-carousel__nav">
+    <button type="button" class="d-btn d-btn-square d-btn-outline theme-bordered" aria-label={prevLabel}>{prevLabel}</button>
+    <button type="button" class="d-btn d-btn-square d-btn-outline theme-bordered" aria-label={nextLabel}>{nextLabel}</button>
+  </div>
+</section>

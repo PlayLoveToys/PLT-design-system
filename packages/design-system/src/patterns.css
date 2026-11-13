@@ -11,6 +11,17 @@
   border-bottom: var(--plt-section-border-width) solid var(--plt-border-color);
 }
 
+.plt-market-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.plt-market-selector__summary {
+  cursor: pointer;
+  list-style: none;
+}
+.plt-market-selector__summary::-webkit-details-marker { display: none; }
+
 .plt-section-header__eyebrow { justify-self: start; }
 .plt-section-header__title { margin: 0; color: var(--plt-color-primary); }
 .plt-section-header__description {
@@ -847,7 +858,9 @@ plt-quick-view dialog::backdrop {
   border: var(--plt-border-width) solid var(--plt-color-base-300);
   border-radius: var(--plt-radius-selector);
   overflow: hidden;
+  vertical-align: middle;
 }
+.plt-swatch--sm { width: 1rem; height: 1rem; }
 .plt-swatch img { width: 100%; height: 100%; object-fit: cover; }
 
 /* FAQ / product details: daisyUI collapses stacked under a .plt-faq wrapper. */
@@ -883,6 +896,45 @@ plt-quick-view dialog::backdrop {
   padding-left: 1rem;
   border-left: var(--plt-border-width) solid var(--plt-color-secondary);
   font-style: italic;
+}
+
+.plt-chip-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.plt-chip-pills .d-badge { text-decoration: none; }
+
+.plt-carousel { display: grid; gap: 1rem; }
+.plt-carousel__viewport { overflow: hidden; }
+.plt-carousel__track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.plt-carousel__track > * { scroll-snap-align: start; flex: 0 0 auto; }
+.plt-carousel__nav { display: flex; gap: 0.5rem; }
+
+.plt-trust-bar { display: grid; gap: 1rem; }
+.plt-trust-bar__list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plt-trust-bar__item { display: grid; gap: 0.5rem; padding: 1rem; }
+.plt-trust-bar__label { margin: 0; }
+
+.plt-link-grid { display: grid; gap: 1.5rem; }
+.plt-link-grid__columns {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
 }
 
 /* Collection filters & sort: a collapsible panel on small screens, always-open bar from 64rem. */

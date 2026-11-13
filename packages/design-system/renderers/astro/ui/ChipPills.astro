@@ -1,0 +1,27 @@
+---
+interface ChipItem {
+  label: string;
+  url: string;
+  current?: boolean;
+}
+
+interface Props {
+  items: ChipItem[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+<nav class="plt-chip-pills" aria-label="Pills">
+  {
+    items.map((item) => (
+      <a
+        class:list={["d-badge", "theme-bordered", item.current ? "d-badge-primary" : "d-badge-outline"]}
+        href={item.url}
+        aria-current={item.current ? "page" : undefined}
+      >
+        {item.label}
+      </a>
+    ))
+  }
+</nav>

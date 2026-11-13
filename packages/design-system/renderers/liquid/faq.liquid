@@ -1,0 +1,17 @@
+{% comment %}
+  PLT Faq renderer. `question` is escaped; `answer` is pre-sanitized HTML from the consumer.
+  Expects `items` as an array of { question, answer }; optional `heading`.
+{% endcomment %}
+<section class="plt-faq">
+  {% if heading != blank %}
+    <h2 class="theme-headline-lg">{{ heading | escape }}</h2>
+  {% endif %}
+  {% for item in items %}
+    <details class="d-collapse d-collapse-arrow theme-bordered">
+      <summary class="d-collapse-title theme-label-bold">{{ item.question | escape }}</summary>
+      <div class="d-collapse-content">
+        <div class="plt-prose">{{ item.answer }}</div>
+      </div>
+    </details>
+  {% endfor %}
+</section>

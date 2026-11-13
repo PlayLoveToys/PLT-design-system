@@ -50,6 +50,9 @@ const requiredEscapes = {
   "renderers/liquid/section-header.liquid": [
     "{{ title | escape }}",
   ],
+  "renderers/liquid/faq.liquid": [
+    "{{ item.question | escape }}",
+  ],
   "renderers/liquid/editorial-card.liquid": [
     "{{ url | escape }}",
     "{{ title | escape }}",
@@ -62,6 +65,19 @@ const requiredEscapes = {
   ],
   "renderers/liquid/navbar.liquid": [
     "{{ site_name | escape }}",
+  ],
+  "renderers/liquid/megamenu.liquid": [
+    "{{ id | escape }}",
+    "{{ label | escape }}",
+    "{{ column.title | escape }}",
+    "{{ child.label | escape }}",
+    "{{ child.url | escape }}",
+  ],
+  "renderers/liquid/market-selector.liquid": [
+    "{{ country.url | escape }}",
+    "{{ country.label | escape }}",
+    "{{ language.url | escape }}",
+    "{{ language.label | escape }}",
   ],
   "renderers/liquid/footer.liquid": [
     "{{ site_name | escape }}",
@@ -76,6 +92,28 @@ const requiredEscapes = {
   ],
   "renderers/liquid/empty-state.liquid": [
     "{{ heading | escape }}",
+  ],
+  "renderers/liquid/chip-pills.liquid": [
+    "{{ item.url | escape }}",
+    "{{ item.label | escape }}",
+  ],
+  "renderers/liquid/location-card.liquid": [
+    "{{ url | escape }}",
+    "{{ title | escape }}",
+  ],
+  "renderers/liquid/carousel.liquid": [
+    "{{ prev_label | default: 'Previous' | escape }}",
+    "{{ next_label | default: 'Next' | escape }}",
+  ],
+  "renderers/liquid/trust-bar.liquid": [
+    "{{ item.label | escape }}",
+  ],
+  "renderers/liquid/link-grid.liquid": [
+    "{{ link.url | escape }}",
+    "{{ link.label | escape }}",
+  ],
+  "renderers/liquid/swatch.liquid": [
+    "{{ image_url | escape }}",
   ],
   "renderers/liquid/search-field.liquid": [
     "{{ placeholder | default: 'Search products' | escape }}",

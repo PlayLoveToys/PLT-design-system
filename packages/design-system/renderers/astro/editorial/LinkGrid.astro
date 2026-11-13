@@ -1,0 +1,40 @@
+---
+interface LinkItem {
+  label: string;
+  url: string;
+}
+
+interface LinkColumn {
+  title?: string;
+  links: LinkItem[];
+}
+
+interface Props {
+  columns: LinkColumn[];
+  heading?: string;
+}
+
+const { columns = [], heading } = Astro.props;
+---
+
+<section class="plt-link-grid">
+  {heading && <h2 class="theme-headline-lg">{heading}</h2>}
+  <div class="plt-link-grid__columns">
+    {
+      columns.map((column) => (
+        <div class="plt-link-grid__column">
+          {column.title && (
+            <h3 class="theme-headline-sm theme-headline-underline">{column.title}</h3>
+          )}
+          <ul class="d-menu">
+            {column.links.map((link) => (
+              <li>
+                <a class="theme-label-bold" href={link.url}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
