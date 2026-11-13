@@ -1,10 +1,10 @@
 {% doc %}
   Liquid adapter for <plt-filter-bar>: maps Shopify storefront filters
   (`collection.filters` / `search.filters`) to the FilterBar contract. List
-  filters are multi-value checkbox groups (a value with no results is disabled
-  unless applied) and price-range filters are a `range` of two number inputs;
-  other filter types are skipped. Without JavaScript the fallback form submits
-  normally.
+  and boolean filters are multi-value checkbox groups (a value with no results
+  is disabled unless applied) and price-range filters are a `range` of two
+  number inputs; other filter types are skipped. Without JavaScript the
+  fallback form submits normally.
 
   @param {filter[]} filters - collection.filters
   @param {string} [action] - Form action (default: current page)
@@ -37,7 +37,7 @@
   [
   {%- assign first = true -%}
   {%- for filter in filters -%}
-    {%- if filter.type == 'list' -%}
+    {%- if filter.type == 'list' or filter.type == 'boolean' -%}
       {%- unless first -%},{%- endunless -%}{%- assign first = false -%}
       {"id":{{ filter.param_name | json }},"label":{{ filter.label | json }},"multiple":true,"collapsible":{{ is_collapsible | json }},"options":[
       {%- for value in filter.values -%}{"label":{{ value.label | json }},"value":{{ value.value | json }},"selected":{{ value.active | json }},"count":{{ value.count | default: 0 | json }},"disabled":{% if value.count == 0 and value.active == false %}true{% else %}false{% endif %}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
@@ -56,9 +56,9 @@
     {%- if sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ sort_by | escape }}">{%- endif -%}
     {%- if search_terms != blank -%}<input type="hidden" name="q" value="{{ search_terms | escape }}">{%- endif -%}
     {%- for filter in filters -%}
-      {%- if filter.type == 'list' or filter.type == 'price_range' -%}
+      {%- if filter.type == 'list' or filter.type == 'boolean' or filter.type == 'price_range' -%}
         {%- if is_collapsible -%}<details class="plt-filter-bar__details"{% if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank %} open{% endif %}><summary class="theme-label-bold">{{ filter.label | escape }}</summary>{%- endif -%}
-        {%- if filter.type == 'list' -%}
+        {%- if filter.type == 'list' or filter.type == 'boolean' -%}
           <fieldset class="plt-filter-bar__field plt-filter-bar__group"{% if is_collapsible %} aria-label="{{ filter.label | escape }}"{% endif %}>
             {%- unless is_collapsible -%}<legend class="theme-label-bold">{{ filter.label | escape }}</legend>{%- endunless -%}
             <ul class="plt-filter-bar__options">

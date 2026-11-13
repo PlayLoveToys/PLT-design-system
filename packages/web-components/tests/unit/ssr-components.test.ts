@@ -115,6 +115,16 @@ describe("server rendering of every component", () => {
   it("Liquid: filters, sort options and paginate", async () => {
     const filters = [
       { type: "list", param_name: "filter.v.option.color", label: "Color", values: [{ value: "Red", label: "Red", active: true, count: 4 }, { value: "Blue", label: "Blue", active: true, count: 2 }] },
+      {
+        type: "boolean",
+        param_name: "filter.p.m.custom.organic",
+        label: "Organic",
+        active_values: [{ value: "1" }],
+        values: [
+          { value: "1", label: "Yes", active: true, count: 3 },
+          { value: "0", label: "No", active: false, count: 0 },
+        ],
+      },
       { type: "price_range", param_name: "filter.v.price", label: "Price", values: [], range_min: 500, range_max: 20000, min_value: { param_name: "filter.v.price.gte", value: 10 }, max_value: { param_name: "filter.v.price.lte", value: null } },
     ];
     const filterHtml = await render(`${adapters}plt-filter-bar.liquid`, {
@@ -127,6 +137,16 @@ describe("server rendering of every component", () => {
     expect(attribute(filterHtml, "filters")).toEqual([
       { id: "filter.v.option.color", label: "Color", multiple: true, collapsible: false, options: [{ label: "Red", value: "Red", selected: true, count: 4, disabled: false }, { label: "Blue", value: "Blue", selected: true, count: 2, disabled: false }] },
       {
+        id: "filter.p.m.custom.organic",
+        label: "Organic",
+        multiple: true,
+        collapsible: false,
+        options: [
+          { label: "Yes", value: "1", selected: true, count: 3, disabled: false },
+          { label: "No", value: "0", selected: false, count: 0, disabled: true },
+        ],
+      },
+      {
         id: "filter.v.price",
         label: "Price",
         collapsible: false,
@@ -134,13 +154,15 @@ describe("server rendering of every component", () => {
         range: { min: { name: "filter.v.price.gte", value: "10", placeholder: "5.00" }, max: { name: "filter.v.price.lte", value: "", placeholder: "200.00" } },
       },
     ]);
+    expect(filterHtml).toContain('type="checkbox" name="filter.p.m.custom.organic" value="1" checked');
+    expect(filterHtml).toContain('value="0" disabled');
     expect(filterHtml).toContain('type="number" inputmode="decimal" min="0" step="any" name="filter.v.price.gte" value="10" placeholder="5.00" aria-label="Price Min"');
     expect(filterHtml).not.toContain("hide-chips");
 
     const collapsedHtml = await render(`${adapters}plt-filter-bar.liquid`, {
       filters: [
         { type: "list", param_name: "filter.p.vendor", label: "Brand", active_values: [], values: [{ value: "A", label: "A", active: false, count: 3 }, { value: "B", label: "B", active: false, count: 0 }] },
-        filters[1],
+        filters[2],
       ],
       collapsible: true,
       hide_chips: true,
@@ -172,7 +194,13 @@ describe("server rendering of every component", () => {
       search_terms: "gifts",
     });
     expect(attribute(sortHtml, "options")[1]).toEqual({ label: "Price, low to high", value: "price-ascending", selected: true });
-    expect(attribute(sortHtml, "preserve")).toEqual({ q: "gifts", "filter.v.option.color": ["Red", "Blue"], "filter.v.price.gte": "10" });
+    expect(attribute(sortHtml, "preserve")).toEqual({
+      q: "gifts",
+      "filter.v.option.color": ["Red", "Blue"],
+      "filter.p.m.custom.organic": ["1"],
+      "filter.v.price.gte": "10",
+    });
+    expect(sortHtml).toContain('<input type="hidden" name="filter.p.m.custom.organic" value="1">');
     expect(sortHtml).toContain('<input type="hidden" name="filter.v.price.gte" value="10">');
     expect(sortHtml).not.toContain("filter.v.price.lte");
     expect(sortHtml).toContain('<form data-plt-fallback class="plt-sort-select" action="/search" method="get">');

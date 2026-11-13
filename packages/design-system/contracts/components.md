@@ -256,6 +256,8 @@ A filter with `multiple: true` is a checkbox group (options with value `""` are 
 
 Facet data resolution stays outside the contract.
 
+Liquid adapter (`plt-filter-bar.liquid`): maps Shopify `filter.type` `list` and `boolean` to `multiple: true` checkbox groups (same anatomy; a value with `count == 0` and not applied is `disabled`), and `price_range` to `range` bounds. Other Shopify filter types are skipped. `plt-sort-select.liquid` preserves active `list` / `boolean` values and price bounds the same way.
+
 Interactive version: `<plt-filter-bar>` (`filters`, `action`, `method`, `manual`, `orientation`, `hide-chips`, `labels`, `preserve`) adds active-filter chips (one per value; a range bound is a chip such as "Price: Min 10") and "clear all"; `hide-chips` leaves the active filters to the frontend. `labels` also takes `min` and `max`, the prefix of a range chip and of a bound's accessible name. Each change emits a cancelable `plt:filter-change` (`{ values, changed, query }`; `values` holds a string per select filter and per range bound (keyed by the bound's `name`) and an array per `multiple` filter, and `query` repeats the name for arrays); if not cancelled the form submits (GET, empty filters omitted). Client-routed frontends cancel it and navigate. `manual` shows an Apply button instead. `orientation="vertical"` stacks the controls for a sidebar. `preserve` is `{ name: string | string[] }` of query parameters another control owns (the sort order, say); they are carried as hidden inputs so a native submit keeps them.
 
 ## SortSelect
