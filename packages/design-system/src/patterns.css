@@ -11,6 +11,17 @@
   border-bottom: var(--plt-section-border-width) solid var(--plt-border-color);
 }
 
+.plt-market-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.plt-market-selector__summary {
+  cursor: pointer;
+  list-style: none;
+}
+.plt-market-selector__summary::-webkit-details-marker { display: none; }
+
 .plt-section-header__eyebrow { justify-self: start; }
 .plt-section-header__title { margin: 0; color: var(--plt-color-primary); }
 .plt-section-header__description {

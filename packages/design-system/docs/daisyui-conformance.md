@@ -22,6 +22,7 @@ Supported baseline: daisyUI `>=5.7.8 <6` with Tailwind CSS `>=4 <5`.
 | Breadcrumbs | `d-breadcrumbs` |
 | Navbar | `d-navbar` + `d-menu` |
 | MegaMenu | `plt-megamenu` panel inside `d-navbar`; lists follow `d-menu` spacing, links use `theme-*` type |
+| Market selector | `d-dropdown` + `d-badge` + `d-menu` inside `.plt-market-selector` |
 | Footer | `d-footer` + `d-menu` |
 | Cart drawer | `d-drawer` + `d-drawer-toggle` + `d-drawer-side` |
 | Join groups (qty, pagination) | `d-join` |

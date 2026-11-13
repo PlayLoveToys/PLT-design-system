@@ -144,6 +144,16 @@ Standalone renderers: Astro `MegaMenu.astro`, Liquid `megamenu.liquid`. The Navb
 
 The panel lives inside the sticky `.plt-navbar` (`.plt-megamenu`, `data-open="true|false"`); anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`. Its trigger is the top-level link with `aria-haspopup="true"`, `aria-expanded` and `aria-controls` (or `[data-plt-megamenu-trigger]`). `<plt-navbar>` owns the behaviour: open on hover or focus, ArrowDown into the panel, close after leaving trigger and panel (150 ms), on focus leaving or on following a link, Escape closes and returns focus; one panel open at a time.
 
+## MarketSelector
+
+Market and locale switch UI only. URL building, `{% form 'localization' %}`, and market resolution stay in the consumer.
+
+Required: `countries` — array of `{ label, url, current? }`; `languages` — array of `{ label, url, current? }`.
+
+Optional: `country_aria_label`, `language_aria_label`, `current_language_label` (summary text for the language control; defaults to the current language's `label`).
+
+Anatomy: `.plt-market-selector` with two native `details.d-dropdown` panels (`d-menu d-dropdown-content`, `d-badge` summaries). Links are plain `<a href>` — no app JS.
+
 ## Footer
 
 Required: `site_name`.

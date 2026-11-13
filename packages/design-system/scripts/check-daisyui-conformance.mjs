@@ -87,6 +87,8 @@ const required = {
   "renderers/liquid/navbar.liquid": ["d-navbar", "d-menu", "d-btn", "plt-navbar"],
   "renderers/astro/navigation/MegaMenu.astro": ["plt-megamenu", "plt-megamenu__inner", "plt-megamenu__column", "plt-megamenu__title", "plt-megamenu__list", "plt-megamenu__link"],
   "renderers/liquid/megamenu.liquid": ["plt-megamenu", "plt-megamenu__inner", "plt-megamenu__column", "plt-megamenu__title", "plt-megamenu__list", "plt-megamenu__link"],
+  "renderers/astro/navigation/MarketSelector.astro": ["d-dropdown", "d-badge", "d-menu", "plt-market-selector"],
+  "renderers/liquid/market-selector.liquid": ["d-dropdown", "d-badge", "d-menu", "plt-market-selector"],
   "renderers/astro/layout/Footer.astro": ["d-footer", "d-menu", "d-btn", "plt-footer"],
   "renderers/liquid/footer.liquid": ["d-footer", "d-menu", "d-btn", "plt-footer"],
   "renderers/astro/cart/CartDrawer.astro": ["d-drawer", "d-drawer-toggle", "d-drawer-side", "d-btn", "plt-cart-drawer"],

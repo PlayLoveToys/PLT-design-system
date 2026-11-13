@@ -1,0 +1,62 @@
+---
+interface MarketOption {
+  label: string;
+  url: string;
+  current?: boolean;
+}
+
+interface Props {
+  countries: MarketOption[];
+  languages: MarketOption[];
+  countryAriaLabel?: string;
+  languageAriaLabel?: string;
+  currentLanguageLabel?: string;
+}
+
+const {
+  countries = [],
+  languages = [],
+  countryAriaLabel = "Select country",
+  languageAriaLabel = "Select language",
+  currentLanguageLabel,
+} = Astro.props;
+
+const currentCountry = countries.find((c) => c.current) ?? countries[0];
+const currentLanguage =
+  currentLanguageLabel ??
+  languages.find((l) => l.current)?.label ??
+  languages[0]?.label ??
+  "";
+---
+
+<div class="plt-market-selector">
+  <details class="d-dropdown d-dropdown-end">
+    <summary class="d-badge d-badge-ghost plt-market-selector__summary" aria-label={countryAriaLabel}>
+      {currentCountry?.label}
+    </summary>
+    <ul class="d-menu d-dropdown-content bg-base-200 rounded-box z-[110] mt-2 w-44 p-2 shadow">
+      {
+        countries.map((country) => (
+          <li>
+            <a href={country.url} aria-current={country.current ? "true" : undefined}>{country.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </details>
+
+  <details class="d-dropdown d-dropdown-end">
+    <summary class="d-badge d-badge-ghost plt-market-selector__summary" aria-label={languageAriaLabel}>
+      {currentLanguage}
+    </summary>
+    <ul class="d-menu d-dropdown-content bg-base-200 rounded-box z-[110] mt-2 w-28 p-2 shadow">
+      {
+        languages.map((language) => (
+          <li>
+            <a href={language.url} aria-current={language.current ? "true" : undefined}>{language.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </details>
+</div>

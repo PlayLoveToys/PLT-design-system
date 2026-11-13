@@ -73,6 +73,12 @@ const requiredEscapes = {
     "{{ child.label | escape }}",
     "{{ child.url | escape }}",
   ],
+  "renderers/liquid/market-selector.liquid": [
+    "{{ country.url | escape }}",
+    "{{ country.label | escape }}",
+    "{{ language.url | escape }}",
+    "{{ language.label | escape }}",
+  ],
   "renderers/liquid/footer.liquid": [
     "{{ site_name | escape }}",
   ],

@@ -99,7 +99,7 @@ Visual units the storefront already uses on more than one surface, with no desig
 | Component | Used for | Notes |
 | --- | --- | --- |
 | `MegaMenu` | Desktop collections menu | **Defined** — standalone Liquid/Astro renderers; Navbar includes them. Text columns only. |
-| `MarketSelector` | Market and locale switch | Storefront: `src/components/navigation/MarketSelector.astro`. UI only; market resolution stays in the app. |
+| `MarketSelector` | Market and locale switch | **Defined** — Liquid/Astro; UI only; market resolution stays in the app. |
 | `Price` | Price and compare-at | Storefront: `src/components/commerce/Price.astro`. Formatted strings only, same rule as `ProductCard`. |
 | `MediaGallery` | PDP and featured product | Gallery plus thumbnails. Scroll and Alpine stay outside. |
 | `Faq` | Canonical editorial block plus home and local pages | **Defined** — `d-collapse` under `.plt-faq`; Liquid + Astro renderers. |
