@@ -7,7 +7,7 @@
   @param {string} [current] - collection.sort_by | default: collection.default_sort_by
   @param {string} [label] - Default: Sort by
   @param {string} [apply_label]
-  @param {filter[]} [filters] - Active Shopify collection/search filters (list values and price range bounds are preserved)
+  @param {filter[]} [filters] - Active Shopify collection/search filters (list/boolean values and price range bounds are preserved)
   @param {string} [search_terms] - Preserved Shopify search query (`q`)
   @param {string} [action] - Form action (default: current page)
   @param {string} [script_url] - Bundle URL; 'none' skips the tag
@@ -26,7 +26,7 @@
 {%- capture preserve_json -%}
   {"q":{{ search_terms | default: '' | json }}
   {%- for filter in filters -%}
-    {%- if filter.type == 'list' -%}
+    {%- if filter.type == 'list' or filter.type == 'boolean' -%}
       ,{{ filter.param_name | json }}:[{%- assign first_active = true -%}{%- for value in filter.values -%}{%- if value.active -%}{%- unless first_active -%},{%- endunless -%}{{ value.value | json }}{%- assign first_active = false -%}{%- endif -%}{%- endfor -%}]
     {%- elsif filter.type == 'price_range' -%}
       {%- if filter.min_value.value != blank -%},{{ filter.min_value.param_name | json }}:{{ filter.min_value.value | append: '' | json }}{%- endif -%}
@@ -37,7 +37,7 @@
 <plt-sort-select name="sort_by" label="{{ label_text | escape }}" action="{{ action | escape }}" apply-label="{{ apply_text | escape }}" preserve="{{ preserve_json | strip | escape }}" options="{{ options_json | strip | escape }}">
   <form data-plt-fallback class="plt-sort-select" action="{{ action | escape }}" method="get">
     {%- if search_terms != blank -%}<input type="hidden" name="q" value="{{ search_terms | escape }}">{%- endif -%}
-    {%- for filter in filters -%}{%- if filter.type == 'list' -%}{%- for value in filter.values -%}{%- if value.active -%}<input type="hidden" name="{{ filter.param_name | escape }}" value="{{ value.value | escape }}">{%- endif -%}{%- endfor -%}{%- elsif filter.type == 'price_range' -%}{%- if filter.min_value.value != blank -%}<input type="hidden" name="{{ filter.min_value.param_name | escape }}" value="{{ filter.min_value.value | escape }}">{%- endif -%}{%- if filter.max_value.value != blank -%}<input type="hidden" name="{{ filter.max_value.param_name | escape }}" value="{{ filter.max_value.value | escape }}">{%- endif -%}{%- endif -%}{%- endfor -%}
+    {%- for filter in filters -%}{%- if filter.type == 'list' or filter.type == 'boolean' -%}{%- for value in filter.values -%}{%- if value.active -%}<input type="hidden" name="{{ filter.param_name | escape }}" value="{{ value.value | escape }}">{%- endif -%}{%- endfor -%}{%- elsif filter.type == 'price_range' -%}{%- if filter.min_value.value != blank -%}<input type="hidden" name="{{ filter.min_value.param_name | escape }}" value="{{ filter.min_value.value | escape }}">{%- endif -%}{%- if filter.max_value.value != blank -%}<input type="hidden" name="{{ filter.max_value.param_name | escape }}" value="{{ filter.max_value.value | escape }}">{%- endif -%}{%- endif -%}{%- endfor -%}
     <label class="theme-label-bold">{{ label_text | escape }}
       <select class="d-select" name="sort_by">
         {%- for option in options -%}
