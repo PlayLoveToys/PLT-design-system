@@ -1,0 +1,21 @@
+---
+interface Props {
+  color?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  label?: string;
+  size?: "sm" | "md";
+}
+
+const { color, imageUrl, imageAlt = "", label, size = "md" } = Astro.props;
+const className = size === "sm" ? "plt-swatch plt-swatch--sm" : "plt-swatch";
+---
+
+<span
+  class={className}
+  style={color ? `background-color: ${color}` : undefined}
+  role={label ? "img" : undefined}
+  aria-label={label}
+>
+  {imageUrl && <img src={imageUrl} alt={imageAlt || label || ""} />}
+</span>

@@ -1,0 +1,18 @@
+{% comment %}
+  PLT Swatch. Optional color, image_url, image_alt, label, size (sm|md).
+{% endcomment %}
+{%- liquid
+  assign swatch_class = 'plt-swatch'
+  if size == 'sm'
+    assign swatch_class = swatch_class | append: ' plt-swatch--sm'
+  endif
+-%}
+<span
+  class="{{ swatch_class }}"
+  {% if color != blank %}style="background-color: {{ color | escape }};"{% endif %}
+  {% if label != blank %}role="img" aria-label="{{ label | escape }}"{% endif %}
+>
+  {% if image_url != blank %}
+    <img src="{{ image_url | escape }}" alt="{{ image_alt | default: label | escape }}">
+  {% endif %}
+</span>

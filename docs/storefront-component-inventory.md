@@ -136,7 +136,7 @@ PDP visuals present in Liquid and missing from the Astro product page, still reu
 | --- | --- |
 | `StickyAddToCart` | **Defined** — `.plt-buy-bar` fixed bar; slots for price/ATC; visibility in the app. |
 | `ReviewStars` | `d-rating` plus a label. Review data stays outside. |
-| `Swatch` | Color or image presentation only. Availability and variant resolution stay outside. |
+| `Swatch` | **Defined** — colour/image chip (`.plt-swatch`); availability stays outside. |
 | `PredictiveSearch` | Results panel for `SearchField`. The Astro site does not have this yet. |
 | `QuickAddModal` | `d-modal` plus a compact `ProductDetail`. |
 

@@ -247,7 +247,9 @@ Stacking: `position: fixed` at `z-index: 30` — the page must put its parent st
 
 ## Swatch
 
-Style hook only until its dedicated contract lands. `plt-swatch` is a colour chip (set `background-color`, or put an `<img>` inside).
+Optional: `color` (CSS colour for `background-color`), `image_url`, `image_alt`, `label` (accessible name), `size` (`sm` | `md`, default `md`).
+
+Colour or image presentation only. Availability and variant selection stay outside (OptionPicker / VariantPicker). Anatomy: `.plt-swatch` (`.plt-swatch--sm` when `size` is `sm`).
 
 ## OptionPicker
 

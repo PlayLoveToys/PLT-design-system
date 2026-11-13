@@ -112,6 +112,9 @@ const requiredEscapes = {
     "{{ link.url | escape }}",
     "{{ link.label | escape }}",
   ],
+  "renderers/liquid/swatch.liquid": [
+    "{{ image_url | escape }}",
+  ],
   "renderers/liquid/search-field.liquid": [
     "{{ placeholder | default: 'Search products' | escape }}",
   ],
