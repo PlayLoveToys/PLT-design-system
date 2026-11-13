@@ -1,0 +1,25 @@
+{% comment %}
+  PLT MegaMenu renderer (text columns). Props: id, label, columns
+  (array of { title, url?, children: [{ label, url, current? }] }).
+  Featured images / product cards stay outside this contract.
+{% endcomment %}
+<div class="plt-megamenu" id="{{ id | escape }}" data-open="false" role="region" aria-label="{{ label | escape }}">
+  <div class="plt-megamenu__inner">
+    {% for column in columns %}
+      <div class="plt-megamenu__column">
+        {% if column.url != blank %}
+          <a class="plt-megamenu__title theme-label-bold" href="{{ column.url | escape }}">{{ column.title | escape }}</a>
+        {% else %}
+          <span class="plt-megamenu__title theme-label-bold">{{ column.title | escape }}</span>
+        {% endif %}
+        {% if column.children.size > 0 %}
+          <ul class="plt-megamenu__list">
+            {% for child in column.children %}
+              <li><a class="plt-megamenu__link" href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.label | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

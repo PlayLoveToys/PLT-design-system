@@ -66,6 +66,13 @@ const requiredEscapes = {
   "renderers/liquid/navbar.liquid": [
     "{{ site_name | escape }}",
   ],
+  "renderers/liquid/megamenu.liquid": [
+    "{{ id | escape }}",
+    "{{ label | escape }}",
+    "{{ column.title | escape }}",
+    "{{ child.label | escape }}",
+    "{{ child.url | escape }}",
+  ],
   "renderers/liquid/footer.liquid": [
     "{{ site_name | escape }}",
   ],

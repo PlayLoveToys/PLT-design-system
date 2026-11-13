@@ -136,11 +136,13 @@ Keyboard in More: Enter/Space on the button toggles; ArrowDown/ArrowUp/Home/End 
 
 ## MegaMenu
 
-Panel shown under a `Navbar` link whose menu item has grandchildren. Text columns only; images and featured products are not part of the contract.
+Panel shown under a `Navbar` link whose menu item has grandchildren. Text columns only; images and featured products are not part of the contract (theme-only extensions stay in the consumer).
 
-Required: `id`, `label`, `columns` — array of `{ title, url, children }` where `children` is an array of `{ label, url, current? }`.
+Required: `id`, `label`, `columns` — array of `{ title, url?, children }` where `children` is an array of `{ label, url, current? }`.
 
-The panel lives inside the sticky `.plt-navbar` (`.plt-megamenu`, `data-open="true|false"`); anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`. Its trigger is the top-level link with `aria-haspopup="true"`, `aria-expanded` and `aria-controls` (or `[data-plt-megamenu-trigger]`). `<plt-navbar>` owns the behaviour: open on hover or focus, ArrowDown into the panel, close after leaving trigger and panel (150 ms), on focus leaving or on following a link, Escape closes and returns focus; one panel open at a time. The Navbar renderers emit the anatomy from `links[].columns`.
+Standalone renderers: Astro `MegaMenu.astro`, Liquid `megamenu.liquid`. The Navbar renderers include them from `links[].columns`.
+
+The panel lives inside the sticky `.plt-navbar` (`.plt-megamenu`, `data-open="true|false"`); anatomy: `.plt-megamenu__inner` > `.plt-megamenu__column` > `.plt-megamenu__title` + `ul.plt-megamenu__list` > `a.plt-megamenu__link`. Its trigger is the top-level link with `aria-haspopup="true"`, `aria-expanded` and `aria-controls` (or `[data-plt-megamenu-trigger]`). `<plt-navbar>` owns the behaviour: open on hover or focus, ArrowDown into the panel, close after leaving trigger and panel (150 ms), on focus leaving or on following a link, Escape closes and returns focus; one panel open at a time.
 
 ## Footer
 
