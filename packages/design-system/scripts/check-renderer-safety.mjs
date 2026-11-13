@@ -108,6 +108,10 @@ const requiredEscapes = {
   "renderers/liquid/trust-bar.liquid": [
     "{{ item.label | escape }}",
   ],
+  "renderers/liquid/link-grid.liquid": [
+    "{{ link.url | escape }}",
+    "{{ link.label | escape }}",
+  ],
   "renderers/liquid/search-field.liquid": [
     "{{ placeholder | default: 'Search products' | escape }}",
   ],

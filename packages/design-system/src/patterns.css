@@ -928,6 +928,13 @@ plt-quick-view dialog::backdrop {
 .plt-trust-bar__item { display: grid; gap: 0.5rem; padding: 1rem; }
 .plt-trust-bar__label { margin: 0; }
 
+.plt-link-grid { display: grid; gap: 1.5rem; }
+.plt-link-grid__columns {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+}
+
 /* Collection filters & sort: a collapsible panel on small screens, always-open bar from 64rem. */
 .plt-collection-filters {
   display: grid;

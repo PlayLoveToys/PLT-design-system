@@ -126,7 +126,7 @@ The Astro home is a stub: Hero, FeaturedCollections, NewArrivals, PromoStrip, Ne
 | `cms-home-education-hub` | `SectionHeader` + `EditorialCard`. |
 | `cms-home-market-block` | `SplitCta` or `PromoStrip`. Decide when implementing that section. |
 | `cms-home-faq` | `Faq` (see the required list). |
-| `cms-home-link-grid` | **New** `LinkGrid`: link columns, reusable on home and 404. Closely related to footer columns. |
+| `cms-home-link-grid` | **Defined** `LinkGrid`: link columns, reusable on home and 404. Closely related to footer columns. |
 | PDP trust badges | Optional `TrustBadges`, or `ChipPills` plus icons. |
 | `newsletter` | Use `Newsletter`. |
 

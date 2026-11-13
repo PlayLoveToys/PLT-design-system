@@ -123,6 +123,8 @@ const required = {
   "renderers/liquid/carousel.liquid": ["d-btn", "plt-carousel"],
   "renderers/astro/editorial/TrustBar.astro": ["plt-trust-bar", "theme-bordered"],
   "renderers/liquid/trust-bar.liquid": ["plt-trust-bar", "theme-bordered"],
+  "renderers/astro/editorial/LinkGrid.astro": ["d-menu", "plt-link-grid"],
+  "renderers/liquid/link-grid.liquid": ["d-menu", "plt-link-grid"],
   "renderers/astro/commerce/Price.astro": ["plt-price", "plt-product-card__price"],
   "renderers/astro/commerce/Stock.astro": ["plt-stock", "data-stock-state"],
   "renderers/astro/editorial/PageOutline.astro": ["plt-docs-toc"],

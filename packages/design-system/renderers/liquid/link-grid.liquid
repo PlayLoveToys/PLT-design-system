@@ -1,0 +1,18 @@
+{% comment %} PLT LinkGrid. columns: [{ title?, links: [{ label, url }] }]; optional heading. {% endcomment %}
+<section class="plt-link-grid">
+  {% if heading != blank %}<h2 class="theme-headline-lg">{{ heading | escape }}</h2>{% endif %}
+  <div class="plt-link-grid__columns">
+    {% for column in columns %}
+      <div class="plt-link-grid__column">
+        {% if column.title != blank %}
+          <h3 class="theme-headline-sm theme-headline-underline">{{ column.title | escape }}</h3>
+        {% endif %}
+        <ul class="d-menu">
+          {% for link in column.links %}
+            <li><a class="theme-label-bold" href="{{ link.url | escape }}">{{ link.label | escape }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>

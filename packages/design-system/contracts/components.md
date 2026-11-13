@@ -339,6 +339,14 @@ Optional: `heading` for the section.
 
 Anatomy: `.plt-trust-bar` grid of `.plt-trust-bar__item` (`theme-bordered`). `icon` is optional pre-sanitized HTML (Material Symbol markup, SVG, etc.). Mobile carousel behaviour stays in the app.
 
+## LinkGrid
+
+Optional: `heading`.
+
+Required: `columns` — array of `{ title?, links: [{ label, url }] }` (same link-column shape as Footer).
+
+Reusable on home and 404. Anatomy: `.plt-link-grid` of columns with `theme-headline-sm` titles and `d-menu` link lists.
+
 ## EmptyState
 
 Required: `heading`.
