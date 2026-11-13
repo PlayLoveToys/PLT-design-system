@@ -1,0 +1,7 @@
+{% comment %}
+  PLT StickyAddToCart (plt-buy-bar). Optional visible (truthy → data-visible="true").
+  Pass price + ATC markup as `content`. Scroll visibility stays in the app.
+{% endcomment %}
+<div class="plt-buy-bar"{% if visible %} data-visible="true"{% endif %}>
+  {{ content }}
+</div>

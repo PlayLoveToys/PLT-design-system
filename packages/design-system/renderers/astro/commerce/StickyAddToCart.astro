@@ -1,0 +1,11 @@
+---
+interface Props {
+  visible?: boolean;
+}
+
+const { visible = false } = Astro.props;
+---
+
+<div class="plt-buy-bar" data-visible={visible ? "true" : undefined}>
+  <slot />
+</div>

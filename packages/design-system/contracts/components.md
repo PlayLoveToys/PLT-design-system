@@ -216,7 +216,7 @@ Opt-in capabilities, switched on by the markup that carries them (a frontend tha
 | `[data-plt-gallery-thumb-track]`, `[data-plt-gallery-thumbs-prev]`, `[data-plt-gallery-thumbs-next]` | The track scrolls the selected thumbnail into view (it never scrolls the page); the buttons page it by one thumbnail. |
 
 
-Style hooks: `plt-buy-bar` (sticky add-to-cart; set `data-visible="true"` to show it, children are the price and the add-to-cart `form`). It is `position: fixed`, so the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so it never covers the footer. Hidden from 64rem up.
+See **StickyAddToCart** for the fixed buy bar (formerly documented only as the `plt-buy-bar` style hook).
 
 ## Faq
 
@@ -233,6 +233,17 @@ Anatomy: wrapper `.plt-faq`; each item is daisyUI `d-collapse d-collapse-arrow` 
 Optional: `body` — HTML already sanitized by the consumer.
 
 Brand prose wrapper (`.plt-prose`). Not a CMS runtime: the consumer passes already-rendered HTML (or, in Astro, a default slot). Themes may override typography via tokens.
+
+## StickyAddToCart
+
+Optional: `visible` (boolean; sets `data-visible="true"` when true).
+
+Fixed bottom bar for phones/tablets (`.plt-buy-bar`). Children / slots:
+
+- Astro: default slot (typically price + ATC form); optional named slots are not required in v1.
+- Liquid: `content` HTML (price + form), pre-assembled by the consumer.
+
+Stacking: `position: fixed` at `z-index: 30` — the page must put its parent stacking context at `z-index: 30` or later positioned content paints over it, and leave bottom padding so the bar never covers the footer. Hidden from 64rem up. Scroll visibility / shake / price sync stay in the app.
 
 ## Swatch
 

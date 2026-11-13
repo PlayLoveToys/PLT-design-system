@@ -125,6 +125,8 @@ const required = {
   "renderers/liquid/trust-bar.liquid": ["plt-trust-bar", "theme-bordered"],
   "renderers/astro/editorial/LinkGrid.astro": ["d-menu", "plt-link-grid"],
   "renderers/liquid/link-grid.liquid": ["d-menu", "plt-link-grid"],
+  "renderers/astro/commerce/StickyAddToCart.astro": ["plt-buy-bar"],
+  "renderers/liquid/sticky-add-to-cart.liquid": ["plt-buy-bar"],
   "renderers/astro/commerce/Price.astro": ["plt-price", "plt-product-card__price"],
   "renderers/astro/commerce/Stock.astro": ["plt-stock", "data-stock-state"],
   "renderers/astro/editorial/PageOutline.astro": ["plt-docs-toc"],

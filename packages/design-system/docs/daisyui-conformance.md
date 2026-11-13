@@ -33,6 +33,7 @@ Supported baseline: daisyUI `>=5.7.8 <6` with Tailwind CSS `>=4 <5`.
 | Carousel | `.plt-carousel` track + `d-btn d-btn-square` nav (scroll in app) |
 | Trust bar | `.plt-trust-bar` items with `theme-bordered` |
 | Link grid | `.plt-link-grid` columns + `d-menu` (same shape as Footer columns) |
+| Sticky add to cart | `.plt-buy-bar` fixed bar (visibility in app) |
 | Docs nav tree | `d-menu` inside `plt-docs-nav-tree` |
 | Docs page outline | `plt-docs-toc` with native `details` / chevron (`plt-docs-toc__*`); no daisyUI TOC part |
 | Editorial docs shell | `plt-editorial-shell` grid + sticky columns; app owns document header/footer |
