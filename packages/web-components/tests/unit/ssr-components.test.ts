@@ -201,6 +201,26 @@ describe("server rendering of every component", () => {
     expect(pageHtml).toContain('previous-url="/collections/all?page=1"');
     expect(pageHtml).toContain("<span>…</span>");
     expect(pageHtml).not.toContain("hellip");
+    expect(pageHtml).not.toContain("variant=");
+    expect(pageHtml).not.toContain("Comments");
+
+    const anchored = await render(`${adapters}plt-pagination.liquid`, { paginate, compact: true, anchor: "#Comments-1&2" });
+    expect(anchored).toContain('variant="compact"');
+    expect(attribute(anchored, "pages").map((page: { url: string | null }) => page.url)).toEqual([
+      "/collections/all?page=1#Comments-1&2",
+      null,
+      null,
+      "/collections/all?page=9#Comments-1&2",
+    ]);
+    expect(anchored).toContain('previous-url="/collections/all?page=1#Comments-1&amp;2"');
+    expect(anchored).toContain('next-url="/collections/all?page=3#Comments-1&amp;2"');
+    const hrefs = [...anchored.matchAll(/<a href="([^"]*)">/g)].map((match) => match[1]);
+    expect(hrefs).toEqual([
+      "/collections/all?page=1#Comments-1&amp;2",
+      "/collections/all?page=1#Comments-1&amp;2",
+      "/collections/all?page=9#Comments-1&amp;2",
+      "/collections/all?page=3#Comments-1&amp;2",
+    ]);
   });
 
   it("Liquid: the Navbar renderer wraps <plt-navbar> and renders mega menus", async () => {

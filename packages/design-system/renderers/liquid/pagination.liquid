@@ -1,5 +1,5 @@
-{% comment %} PLT Pagination renderer. {% endcomment %}
-<nav class="plt-pagination" aria-label="{{ aria_label | default: 'Pagination' | escape }}">
+{% comment %} PLT Pagination renderer. `compact: true` renders content-sized buttons in one joined row. {% endcomment %}
+<nav class="plt-pagination{% if compact %} plt-pagination--compact{% endif %}" aria-label="{{ aria_label | default: 'Pagination' | escape }}">
   <div class="d-join">
     {% if prev_url != blank %}
       <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href="{{ prev_url | escape }}">{{ prev_label | default: 'Previous' | escape }}</a>

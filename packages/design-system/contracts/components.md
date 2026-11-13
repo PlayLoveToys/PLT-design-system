@@ -274,9 +274,11 @@ Optional: `action`, `method`, `input_name`, `placeholder`, `value`, `submit_labe
 
 Required: `pages` — array of `{ label, url?, current?, disabled? }`.
 
-Optional: `aria_label`, `prev_url`, `next_url`, `prev_label`, `next_label`.
+Optional: `aria_label`, `prev_url`, `next_url`, `prev_label`, `next_label`, `compact`.
 
-Interactive version: `<plt-pagination>` (`pages`, `previous-url`, `next-url`, `labels`); links stay links; a plain click emits a cancelable `plt:page-change` (`{ url, label }`) so client-routed frontends can navigate themselves.
+`compact` (boolean; Liquid `compact: true`, Astro `compact`) adds `plt-pagination--compact`: content-sized buttons in one joined row that still wraps. Use it for numbered store pagination (`Previous 1 2 … 12 Next`); the default keeps full-width wrapping buttons for doc pagination with full page titles.
+
+Interactive version: `<plt-pagination>` (`pages`, `previous-url`, `next-url`, `labels`, `variant="compact"`); the Liquid and Astro adapters also take `anchor` (a URL fragment such as `#Comments-123`, appended to every page, previous/next and fallback link); links stay links; a plain click emits a cancelable `plt:page-change` (`{ url, label }`) so client-routed frontends can navigate themselves.
 
 ## EmptyState
 

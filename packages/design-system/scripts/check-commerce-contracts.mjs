@@ -31,6 +31,22 @@ for (const heading of ["## Price", "## Stock"]) {
   }
 }
 
+// Pagination: the opt-in compact variant must exist in CSS, both renderers and the contract.
+const patterns = await readFile(join(root, "src/patterns.css"), "utf8");
+if (!patterns.includes(".plt-pagination--compact")) {
+  errors.push("src/patterns.css is missing the .plt-pagination--compact modifier");
+}
+for (const path of ["renderers/astro/ui/Pagination.astro", "renderers/liquid/pagination.liquid"]) {
+  const source = await readFile(join(root, path), "utf8");
+  if (!source.includes("plt-pagination--compact") || !source.includes("compact")) {
+    errors.push(`${path} must support the compact flag (plt-pagination--compact)`);
+  }
+}
+const paginationContract = contracts.slice(contracts.indexOf("## Pagination"), contracts.indexOf("## EmptyState"));
+for (const token of ["`compact`", "plt-pagination--compact", 'variant="compact"', "`anchor`"]) {
+  if (!paginationContract.includes(token)) errors.push(`contracts/components.md Pagination section is missing ${token}`);
+}
+
 if (errors.length) {
   console.error("commerce contract check failed:\n");
   for (const error of errors) console.error(`- ${error}`);

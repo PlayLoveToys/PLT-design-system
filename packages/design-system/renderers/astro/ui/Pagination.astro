@@ -13,6 +13,8 @@ interface Props {
   nextUrl?: string;
   prevLabel?: string;
   nextLabel?: string;
+  /** Content-sized buttons in one joined row (numbered store pagination). */
+  compact?: boolean;
 }
 
 const {
@@ -22,10 +24,11 @@ const {
   nextUrl,
   prevLabel = "Previous",
   nextLabel = "Next",
+  compact = false,
 } = Astro.props;
 ---
 
-<nav class="plt-pagination" aria-label={ariaLabel}>
+<nav class:list={["plt-pagination", { "plt-pagination--compact": compact }]} aria-label={ariaLabel}>
   <div class="d-join">
     {prevUrl ? (
       <a class="d-btn d-btn-outline d-join-item theme-bordered theme-label-bold" href={prevUrl}>{prevLabel}</a>

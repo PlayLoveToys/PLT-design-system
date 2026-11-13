@@ -511,6 +511,19 @@ describe("<plt-sort-select> and <plt-pagination>", () => {
     element.querySelectorAll("a")[2].dispatchEvent(modified);
     expect(modified.defaultPrevented).toBe(false);
   });
+
+  it("pagination: variant=compact adds the compact modifier and the default does not", async () => {
+    document.body.innerHTML = '<plt-pagination></plt-pagination><plt-pagination variant="compact"></plt-pagination>';
+    const [plain, compact] = [...document.querySelectorAll("plt-pagination")];
+    plain.pages = compact.pages = [{ label: "1", current: true }];
+    await flush(plain);
+    await flush(compact);
+    expect(plain.querySelector("nav")!.className).toBe("plt-pagination");
+    expect(compact.querySelector("nav")!.className).toBe("plt-pagination plt-pagination--compact");
+    compact.variant = "";
+    await flush(compact);
+    expect(compact.querySelector("nav")!.className).toBe("plt-pagination");
+  });
 });
 
 describe("<plt-navbar>", () => {

@@ -33,11 +33,17 @@ export declare class PltPagination extends LitElement {
                 toAttribute(value: unknown): string;
             };
         };
+        variant: {
+            type: StringConstructor;
+            reflect: boolean;
+        };
     };
     pages: PltPage[];
     previousUrl: string;
     nextUrl: string;
     labels: PltPaginationLabels;
+    /** `"compact"` renders content-sized buttons in one joined row (numbered store pagination). */
+    variant: string;
     constructor();
     protected createRenderRoot(): this;
     connectedCallback(): void;

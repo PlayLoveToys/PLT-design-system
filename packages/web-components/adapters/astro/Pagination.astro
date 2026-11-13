@@ -7,16 +7,24 @@ interface Props {
   previousUrl?: string;
   nextUrl?: string;
   labels?: PltPaginationLabels;
+  /** Content-sized buttons in one joined row (numbered store pagination). */
+  compact?: boolean;
+  /** URL fragment appended to every link, e.g. `#Comments-123`. */
+  anchor?: string;
   id?: string;
   class?: string;
 }
 
-const { pages, previousUrl, nextUrl, labels = {}, id, class: className } = Astro.props;
+const { pages: rawPages, previousUrl: rawPreviousUrl, nextUrl: rawNextUrl, labels = {}, compact = false, anchor = "", id, class: className } = Astro.props;
+const pages = anchor ? rawPages.map((page) => (page.url ? { ...page, url: page.url + anchor } : page)) : rawPages;
+const previousUrl = rawPreviousUrl && rawPreviousUrl + anchor;
+const nextUrl = rawNextUrl && rawNextUrl + anchor;
 ---
 
 <plt-pagination
   id={id}
   class={className}
+  variant={compact ? "compact" : undefined}
   pages={JSON.stringify(pages)}
   previous-url={previousUrl}
   next-url={nextUrl}

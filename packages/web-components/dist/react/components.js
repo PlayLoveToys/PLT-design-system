@@ -152,7 +152,7 @@ const PltSortSelect = createComponent({
 const PltPagination = createComponent({
   tag: "plt-pagination",
   load: () => import("../collection/define.js"),
-  properties: ["pages", "previousUrl", "nextUrl", "labels"],
+  properties: ["pages", "previousUrl", "nextUrl", "labels", "variant"],
   attributes: { previousUrl: "previous-url", nextUrl: "next-url" },
   events: { onPageChange: "plt:page-change" },
   fallback: ({ pages, previousUrl, nextUrl, labels }) => h(

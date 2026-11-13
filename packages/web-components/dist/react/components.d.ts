@@ -95,6 +95,8 @@ export interface PltPaginationProps extends BaseProps {
     previousUrl?: string;
     nextUrl?: string;
     labels?: PltPaginationLabels;
+    /** `"compact"`: content-sized buttons in one joined row (numbered store pagination). */
+    variant?: "compact";
     /** Cancel the event (`event.preventDefault()`) to navigate client-side. */
     onPageChange?: Handler<PltPageChangeDetail>;
 }

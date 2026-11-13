@@ -85,6 +85,15 @@ const requiredEscapes = {
   ],
 };
 
+// The Liquid pagination adapter appends a merchant-supplied `anchor` to every URL:
+// each use must still be escaped (HTML attributes) or JSON-encoded (the `pages` payload).
+const paginationAdapter = await readFile(join(root, "../web-components/adapters/liquid/plt-pagination.liquid"), "utf8");
+const anchoredUses = paginationAdapter.match(/append: anchor_suffix[^}]*/g) ?? [];
+if (anchoredUses.length < 5) errors.push("plt-pagination.liquid must append `anchor` to page, previous/next and fallback links");
+for (const use of anchoredUses) {
+  if (!/\|\s*(escape|json)\b/.test(use)) errors.push(`plt-pagination.liquid appends anchor without escape/json: ${use.trim()}`);
+}
+
 for (const [path, snippets] of Object.entries(requiredEscapes)) {
   const text = await readFile(join(root, path), "utf8");
   for (const snippet of snippets) {

@@ -283,6 +283,8 @@ export interface PltPaginationProps extends BaseProps {
   previousUrl?: string;
   nextUrl?: string;
   labels?: PltPaginationLabels;
+  /** `"compact"`: content-sized buttons in one joined row (numbered store pagination). */
+  variant?: "compact";
   /** Cancel the event (`event.preventDefault()`) to navigate client-side. */
   onPageChange?: Handler<PltPageChangeDetail>;
 }
@@ -290,7 +292,7 @@ export interface PltPaginationProps extends BaseProps {
 export const PltPagination = createComponent<PltPaginationProps>({
   tag: "plt-pagination",
   load: () => import("../collection/define.js"),
-  properties: ["pages", "previousUrl", "nextUrl", "labels"],
+  properties: ["pages", "previousUrl", "nextUrl", "labels", "variant"],
   attributes: { previousUrl: "previous-url", nextUrl: "next-url" },
   events: { onPageChange: "plt:page-change" },
   fallback: ({ pages, previousUrl, nextUrl, labels }) =>
