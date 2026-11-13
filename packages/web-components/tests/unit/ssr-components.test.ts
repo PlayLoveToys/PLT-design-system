@@ -16,8 +16,12 @@ import { shopifyLiquid } from "../fixtures/liquid.mjs";
 
 const adapters = fileURLToPath(new URL("../../adapters/liquid/", import.meta.url));
 const renderers = fileURLToPath(new URL("../../../design-system/renderers/liquid/", import.meta.url));
-const render = async (file: string, context: Record<string, unknown>) =>
-  shopifyLiquid().parseAndRender(await readFile(file, "utf8"), context);
+const render = async (file: string, context: Record<string, unknown>) => {
+  // Partials (`{% include %}` / `{% render %}`) need a Liquid root; adapters and
+  // design-system renderers each live in their own directory.
+  const root = file.startsWith(adapters) ? adapters : file.startsWith(renderers) ? renderers : undefined;
+  return shopifyLiquid(root).parseAndRender(await readFile(file, "utf8"), context);
+};
 const decode = (raw: string) =>
   JSON.parse(raw.replace(/&#(\d+);/g, (_, c) => String.fromCharCode(Number(c))).replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&"));
 const attribute = (html: string, name: string) => decode(html.match(new RegExp(`\\s${name}="([^"]*)"`))![1]);
