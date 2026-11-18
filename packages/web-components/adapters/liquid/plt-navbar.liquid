@@ -1,0 +1,224 @@
+{% doc %}
+  Adapter Liquid sincronizable para `<plt-navbar>` (header Shopify). Vendorea el
+  renderer de diseño con datos normalizados o mapea un `linklists` de tres
+  niveles al contrato MegaMenu (DS#4). El tema sigue siendo dueño del carrito,
+  la localización y la búsqueda; este snippet solo compone markup y carga el
+  bundle una vez.
+
+  Nombre `plt-navbar` (no `plt-header`): alinea con el custom element, el
+  renderer `navbar.liquid` y el prefijo `plt-*.liquid` que copia `sync:plt`.
+
+  @param {array} [links] - Contrato Navbar: `{ label, url, current?, columns? }`
+  @param {object} [menu] - `linklists` Shopify si el tema no pasa `links` (tres
+    niveles: ítem → columnas → enlaces)
+  @param {string} site_name - Nombre de la tienda (obligatorio)
+  @param {string} [logo_url]
+  @param {string} [logo_alt]
+  @param {string} [home_url] - Por defecto `routes.root_url` o `/`
+  @param {string} [actions] - HTML extra en `d-navbar-end` (búsqueda, etc.)
+  @param {string} [mobile_actions] - Panel móvil; por defecto igual que actions
+  @param {string} [localization_slot] - HTML del tema (p. ej. `{% form 'localization' %}` con plt-market-selector dentro)
+  @param {array} [countries] - Contrato MarketSelector; con `languages` renderiza plt-market-selector
+  @param {array} [languages]
+  @param {string} [country_aria_label]
+  @param {string} [language_aria_label]
+  @param {string} [current_language_label]
+  @param {boolean} [show_search] - Enlace a búsqueda con `routes.search_url`
+  @param {string} [search_label]
+  @param {boolean} [show_account] - Enlace cuenta (`routes.account_url`)
+  @param {string} [account_label]
+  @param {boolean} [show_cart] - Botón burbuja del carrito (`data-cart-open`);
+    el contador en `[data-plt-cart-count]` lo actualiza el theme vía
+    `document` + `plt:cart-updated` (`detail.item_count`), no este snippet
+  @param {number} [cart_item_count] - Valor inicial del contador; por defecto
+    `cart.item_count` (solo SSR; sin mutaciones en el DS)
+  @param {string} [cart_label] - Texto del botón carrito
+  @param {string} [cart_drawer_id] - aria-controls (default: plt-cart-drawer)
+  @param {string} [menu_open_label] - aria-label del toggle cerrado
+  @param {string} [menu_close_label] - aria-label del toggle abierto (data-label-close)
+  @param {number} [hover_delay] - Atributo hover-delay del WC (ms)
+  @param {string} [publish_height] - Atributo publish-height (`true` o `root`)
+  @param {string} [script_url] - URL del bundle; `none` omite el script
+{% enddoc %}
+{%- liquid
+  assign bundle_url = script_url | default: ''
+  if bundle_url == blank
+    assign bundle_url = 'plt-web-components.bundle.js' | asset_url
+  endif
+  assign brand_home = home_url | default: routes.root_url | default: '/'
+  assign open_label = menu_open_label | default: 'Open menu'
+  assign close_label = menu_close_label | default: 'Close menu'
+  assign drawer_id = cart_drawer_id | default: 'plt-cart-drawer'
+  assign cart_count = cart_item_count
+  if cart_count == blank and cart != blank
+    assign cart_count = cart.item_count
+  endif
+  if cart_count == blank
+    assign cart_count = 0
+  endif
+  assign search_href = routes.search_url | default: '/search'
+  assign account_href = routes.account_url | default: '/account'
+  assign use_contract_links = false
+  if links != blank
+    assign use_contract_links = true
+  endif
+-%}
+{%- capture composed_actions -%}
+  {%- if localization_slot != blank -%}
+    {{ localization_slot }}
+  {%- elsif countries != blank or languages != blank -%}
+    {% render 'plt-market-selector', countries: countries, languages: languages, country_aria_label: country_aria_label, language_aria_label: language_aria_label, current_language_label: current_language_label %}
+  {%- endif -%}
+  {%- if show_search -%}
+    <a class="d-btn d-btn-ghost d-btn-square theme-label-bold" href="{{ search_href | escape }}" aria-label="{{ search_label | default: 'Search' | escape }}"><span aria-hidden="true">⌕</span></a>
+  {%- endif -%}
+  {%- if show_account -%}
+    <a class="d-btn d-btn-ghost theme-label-bold" href="{{ account_href | escape }}">{{ account_label | default: 'Account' | escape }}</a>
+  {%- endif -%}
+  {%- if show_cart -%}
+    <button
+      type="button"
+      class="d-btn d-btn-ghost theme-label-bold plt-navbar__cart"
+      data-cart-open
+      aria-haspopup="dialog"
+      aria-controls="{{ drawer_id | escape }}"
+    >
+      {{ cart_label | default: 'Cart' | escape }}
+      (<span id="plt-cart-bubble-count" data-plt-cart-count>{{ cart_count }}</span>)
+    </button>
+  {%- endif -%}
+  {{ actions }}
+{%- endcapture -%}
+{%- assign tablet_actions = mobile_actions | default: composed_actions -%}
+<plt-navbar{% if hover_delay != blank %} hover-delay="{{ hover_delay | escape }}"{% endif %}{% if publish_height != blank %} publish-height="{{ publish_height | escape }}"{% endif %}>
+<header class="d-navbar plt-navbar" data-plt-navbar>
+  <div class="plt-navbar__inner">
+    <div class="d-navbar-start gap-2">
+      <button
+        type="button"
+        class="d-btn d-btn-ghost d-btn-square plt-navbar__menu-toggle"
+        data-plt-navbar-toggle
+        aria-expanded="false"
+        aria-controls="plt-navbar-mobile"
+        aria-label="{{ open_label | escape }}"
+        data-label-open="{{ open_label | escape }}"
+        data-label-close="{{ close_label | escape }}"
+      >
+        <span aria-hidden="true">☰</span>
+      </button>
+      <a class="d-btn d-btn-ghost plt-navbar__brand" href="{{ brand_home | escape }}" aria-label="{{ site_name | escape }}">
+        {% if logo_url != blank %}
+          <img src="{{ logo_url | escape }}" alt="{{ logo_alt | default: site_name | escape }}">
+        {% else %}
+          <span class="theme-headline-sm">{{ site_name | escape }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    <div class="d-navbar-center plt-navbar__links">
+      <ul class="d-menu d-menu-horizontal px-0">
+        {% if use_contract_links %}
+          {% for link in links %}
+            <li>
+              <a
+                class="theme-label-bold"
+                href="{{ link.url | escape }}"
+                {% if link.current %}aria-current="page"{% endif %}
+                {% if link.columns.size > 0 %}aria-haspopup="true" aria-expanded="false" aria-controls="plt-megamenu-{{ forloop.index0 }}"{% endif %}
+              >{{ link.label | escape }}</a>
+            </li>
+          {% endfor %}
+        {% elsif menu != blank %}
+          {% for link in menu.links %}
+            <li>
+              <a
+                class="theme-label-bold"
+                href="{{ link.url | escape }}"
+                {% if link.active %}aria-current="page"{% endif %}
+                {% if link.links.size > 0 %}aria-haspopup="true" aria-expanded="false" aria-controls="plt-megamenu-{{ forloop.index0 }}"{% endif %}
+              >{{ link.title | escape }}</a>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+      {% if use_contract_links %}
+        {% for link in links %}
+          {% if link.columns.size > 0 %}
+            {% assign megamenu_id = 'plt-megamenu-' | append: forloop.index0 %}
+            {% render 'plt-megamenu', id: megamenu_id, label: link.label, columns: link.columns %}
+          {% endif %}
+        {% endfor %}
+      {% elsif menu != blank %}
+        {% for link in menu.links %}
+          {% if link.links.size > 0 %}
+            {% assign megamenu_id = 'plt-megamenu-' | append: forloop.index0 %}
+            {% render 'plt-megamenu', id: megamenu_id, label: link.title, child_links: link.links %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="d-navbar-end plt-navbar__actions">
+      {{ composed_actions }}
+    </div>
+  </div>
+
+  <div class="plt-navbar__mobile" id="plt-navbar-mobile" data-open="false" hidden>
+    <ul class="d-menu w-full">
+      {% if use_contract_links %}
+        {% for link in links %}
+          <li>
+            <a
+              class="theme-label-bold"
+              href="{{ link.url | escape }}"
+              {% if link.current %}aria-current="page"{% endif %}
+            >{{ link.label | escape }}</a>
+            {% if link.columns.size > 0 %}
+              <ul>
+                {% for column in link.columns %}
+                  <li>
+                    {% if column.url != blank %}<a href="{{ column.url | escape }}">{{ column.title | escape }}</a>{% else %}<span class="theme-label-bold">{{ column.title | escape }}</span>{% endif %}
+                    {% if column.children.size > 0 %}
+                      <ul>
+                        {% for child in column.children %}
+                          <li><a href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.label | escape }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% elsif menu != blank %}
+        {% for link in menu.links %}
+          <li>
+            <a class="theme-label-bold" href="{{ link.url | escape }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+            {% if link.links.size > 0 %}
+              <ul>
+                {% for column_link in link.links %}
+                  <li>
+                    <a href="{{ column_link.url | escape }}" class="theme-label-bold">{{ column_link.title | escape }}</a>
+                    {% if column_link.links.size > 0 %}
+                      <ul>
+                        {% for child in column_link.links %}
+                          <li><a href="{{ child.url | escape }}"{% if child.active %} aria-current="page"{% endif %}>{{ child.title | escape }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+    <div class="plt-navbar__actions">
+      {{ tablet_actions }}
+    </div>
+  </div>
+</header>
+</plt-navbar>
+{%- if bundle_url != 'none' -%}<script type="module" src="{{ bundle_url | escape }}"></script>{%- endif -%}

@@ -254,6 +254,59 @@ describe("server rendering of every component", () => {
     expect(compactHtml).toContain('href="/collections/all?page=3#Comments-123"');
   });
 
+  it("Liquid: plt-navbar adapter wraps <plt-navbar>, mega menu, market and cart bubble", async () => {
+    const links = [
+      { label: "Shop", url: "/shop", columns: [{ title: "New", url: "/new", children: [{ label: "Toys", url: "/new/toys" }] }] },
+      { label: "About", url: "/about" },
+    ];
+    const html = await render(`${adapters}plt-navbar.liquid`, {
+      site_name: "PLT",
+      links,
+      countries: [{ label: "Spain", url: "/es", current: true }],
+      languages: [{ label: "English", url: "/en", current: true }],
+      show_search: true,
+      show_cart: true,
+      cart_item_count: 2,
+      cart: { item_count: 2 },
+      routes: { search_url: "/search", account_url: "/account", root_url: "/" },
+      script_url: "none",
+    });
+    expect(html.trim().startsWith("<plt-navbar>")).toBe(true);
+    expect(html).toContain('aria-haspopup="true" aria-expanded="false" aria-controls="plt-megamenu-0"');
+    expect(html).toContain('<div class="plt-megamenu" id="plt-megamenu-0"');
+    expect(html).toContain('class="plt-market-selector"');
+    expect(html).toContain('href="/search"');
+    expect(html).toContain('data-cart-open');
+    expect(html).toContain('id="plt-cart-bubble-count" data-plt-cart-count>2</span>');
+    expect(html).toContain('aria-controls="plt-cart-drawer"');
+    expect(html).not.toContain("<script");
+
+    const menu = {
+      links: [
+        {
+          title: "Catalog",
+          url: "/collections/all",
+          active: false,
+          links: [
+            {
+              title: "Featured",
+              url: "/collections/featured",
+              links: [{ title: "Rings", url: "/products/ring", active: false }],
+            },
+          ],
+        },
+      ],
+    };
+    const menuHtml = await render(`${adapters}plt-navbar.liquid`, {
+      site_name: "Menu",
+      menu,
+      script_url: "none",
+    });
+    expect(menuHtml).toContain('aria-controls="plt-megamenu-0"');
+    expect(menuHtml).toContain('aria-label="Catalog"');
+    expect(menuHtml).toContain('href="/products/ring"');
+  });
+
   it("Liquid: the Navbar renderer wraps <plt-navbar> and renders mega menus", async () => {
     const links = [
       { label: "Shop", url: "/shop", columns: [{ title: "New", url: "/new", children: [{ label: "Toys", url: "/new/toys" }] }] },
