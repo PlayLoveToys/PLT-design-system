@@ -27,8 +27,11 @@
   @param {string} [search_label]
   @param {boolean} [show_account] - Enlace cuenta (`routes.account_url`)
   @param {string} [account_label]
-  @param {boolean} [show_cart] - Botón burbuja del carrito (`data-cart-open`)
-  @param {number} [cart_item_count] - Contador; por defecto `cart.item_count`
+  @param {boolean} [show_cart] - Botón burbuja del carrito (`data-cart-open`);
+    el contador en `[data-plt-cart-count]` lo actualiza el theme vía
+    `document` + `plt:cart-updated` (`detail.item_count`), no este snippet
+  @param {number} [cart_item_count] - Valor inicial del contador; por defecto
+    `cart.item_count` (solo SSR; sin mutaciones en el DS)
   @param {string} [cart_label] - Texto del botón carrito
   @param {string} [cart_drawer_id] - aria-controls (default: plt-cart-drawer)
   @param {string} [menu_open_label] - aria-label del toggle cerrado

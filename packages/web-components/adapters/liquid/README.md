@@ -34,15 +34,34 @@ sigue siendo la anatomía; el snippet es el **puerto Shopify** hacia ese contrat
 
 ### Burbuja del carrito
 
-El botón carrito incluye:
+El botón carrito incluye el marcador estable del contador (solo markup; sin
+lógica de carrito Shopify en el DS):
 
 ```html
 <span id="plt-cart-bubble-count" data-plt-cart-count>…</span>
 ```
 
-Tras mutar el carrito (p. ej. escuchando `plt:cart-line-change` en
-`plt-cart-drawer`), el tema actualiza el texto o el `textContent` de ese nodo.
-El demo usa el mismo patrón con `[data-cart-open]`.
+**Contrato acordado en PLT-liquid-theme** (PRs del theme #31, #32 y #34): el
+theme escucha en `document` el evento `plt:cart-updated` y actualiza
+`[data-plt-cart-count]` con `detail.item_count` (también llegan
+`detail.total_price` y `detail.cart` en el mismo `detail`).
+
+```js
+document.addEventListener("plt:cart-updated", (event) => {
+  const count = event.detail.item_count;
+  document.querySelectorAll("[data-plt-cart-count]").forEach((node) => {
+    node.textContent = String(count);
+  });
+});
+```
+
+`plt:cart-line-change` (y el resto de eventos de línea en `plt-cart-drawer`) es
+un evento **secundario** del bridge del theme hacia `/cart/change.js`; no es el
+contrato de la burbuja. El adapter no emite ni interpreta `plt:cart-updated`:
+solo deja el gancho en el DOM.
+
+El ejemplo interno `examples/shared/store.js` sigue usando un contador local para
+el demo; en storefront real el theme es dueño del bridge y del evento.
 
 ### Eventos DOM (no configurables en Liquid)
 
@@ -88,7 +107,8 @@ Con datos ya normalizados (metafields del theme):
 1. Fijar commit de `@playlovetoys/platform` / design-system.
 2. `npm install` y `npm run sync:plt` (copia `plt-*.liquid` → `snippets/`).
 3. Sustituir el header actual por `{% render 'plt-navbar', … %}`.
-4. Mantener el JS del theme que escucha `plt:cart-line-change` y actualiza
-   `#plt-cart-bubble-count` (o `querySelector('[data-plt-cart-count]')`).
+4. Mantener el bridge del theme que dispara `plt:cart-updated` en `document` tras
+   cada mutación y actualiza `[data-plt-cart-count]` con `detail.item_count`
+   (véase PRs #31, #32, #34 del theme).
 5. Para localización Shopify, pasar `localization_slot` con el `form` del theme
    o mapear `countries` / `languages` antes del render.
