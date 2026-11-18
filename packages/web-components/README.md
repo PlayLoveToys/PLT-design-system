@@ -30,7 +30,7 @@ None fetches data, formats money, mutates the cart or routes: the frontend does.
 | Collection | `<plt-filter-bar>` | `filters` (a filter may be `multiple`: checkbox group, `range`: two number inputs, or `collapsible`), `action`, `manual`, `orientation`, `hide-chips`, `labels`, `preserve` | `plt:filter-change` (cancelable) |
 | Collection | `<plt-sort-select>` | `options`, `name`, `label` | `plt:sort-change` (cancelable) |
 | Collection | `<plt-pagination>` | `pages`, `previous-url`, `next-url` | `plt:page-change` (cancelable) |
-| Navigation | `<plt-navbar>` | Navbar + MegaMenu markup; opt-in `hover-delay`, `[data-plt-megamenu]`, `publish-height`, deferred images, overflow "More" (see `contracts/components.md`) | `plt:navbar-toggle`, `plt:megamenu-toggle`, `plt:navbar-overflow` |
+| Navigation | `<plt-navbar>` | Navbar + MegaMenu markup (`plt-navbar.liquid` adapter or DS `navbar.liquid` renderer); opt-in `hover-delay`, `[data-plt-megamenu]`, `publish-height`, deferred images, overflow "More" (see `contracts/components.md`) | `plt:navbar-toggle`, `plt:megamenu-toggle`, `plt:navbar-overflow` |
 
 Two kinds of element:
 
@@ -131,7 +131,7 @@ so the classes are generated.
 | `@playlovetoys/web-components/variant-picker/resolve` | Pure variant resolution (no DOM, no Lit). |
 | `@playlovetoys/web-components/variant-picker/storefront` | `fromStorefrontProduct()` — Storefront API product → picker data. |
 | `@playlovetoys/web-components/react` | React 18/19 adapters for every element, built on `createComponent()`. |
-| `@playlovetoys/web-components/adapters/liquid/*` | Snippets: `plt-variant-picker`, `plt-quantity-selector`, `plt-cart-drawer`, `plt-filter-bar`, `plt-sort-select`, `plt-pagination`, `plt-web-components` (loads the bundle). |
+| `@playlovetoys/web-components/adapters/liquid/*` | Snippets: `plt-variant-picker`, `plt-quantity-selector`, `plt-cart-drawer`, `plt-filter-bar`, `plt-sort-select`, `plt-pagination`, `plt-navbar`, `plt-megamenu`, `plt-market-selector`, `plt-web-components` (loads the bundle). See `adapters/liquid/README.md`. |
 | `@playlovetoys/web-components/adapters/astro/*` | `VariantPicker`, `QuantitySelector`, `CartLine`, `CartDrawer`, `FilterBar`, `SortSelect`, `Pagination`, `WebComponents` (registers all). |
 
 The design-system renderers ProductDetail, ProductQuickView and Navbar (Astro
@@ -199,7 +199,9 @@ The theme keeps price, button state and URL updates by listening to
 snippets map Shopify objects directly: `plt-cart-drawer` (`cart`; prices
 formatted with `money` in Liquid), `plt-filter-bar` (`collection.filters`,
 list filters), `plt-sort-select` (`collection.sort_options`),
-`plt-pagination` (`paginate`), `plt-quantity-selector`.
+`plt-pagination` (`paginate`), `plt-quantity-selector`, `plt-navbar` (`links` or
+`menu` linklist + optional MarketSelector / cart bubble; see
+`adapters/liquid/README.md`).
 
 ### Astro
 

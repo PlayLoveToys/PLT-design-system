@@ -1,0 +1,46 @@
+{% doc %}
+  Fragmento PLT MegaMenu (columnas de texto). Sincronizable con `sync:plt`; lo
+  incluye `plt-navbar.liquid`. Contrato: id, label, columns
+  (`{ title, url?, children: [{ label, url, current? }] }`).
+
+  @param {string} id - Id estable del panel (aria-controls del trigger)
+  @param {string} label - Nombre accesible del panel (aria-label)
+  @param {array} [columns] - Columnas del contrato MegaMenu (DS#4)
+  @param {array} [child_links] - Alternativa Shopify: hijos de un ítem de menú
+    (nivel 2 = columna, nivel 3 = enlaces). Mutuamente excluyente con columns.
+{% enddoc %}
+<div class="plt-megamenu" id="{{ id | escape }}" data-open="false" role="region" aria-label="{{ label | escape }}">
+  <div class="plt-megamenu__inner">
+    {% if columns != blank %}
+    {% for column in columns %}
+      <div class="plt-megamenu__column">
+        {% if column.url != blank %}
+          <a class="plt-megamenu__title theme-label-bold" href="{{ column.url | escape }}">{{ column.title | escape }}</a>
+        {% else %}
+          <span class="plt-megamenu__title theme-label-bold">{{ column.title | escape }}</span>
+        {% endif %}
+        {% if column.children.size > 0 %}
+          <ul class="plt-megamenu__list">
+            {% for child in column.children %}
+              <li><a class="plt-megamenu__link" href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.label | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% elsif child_links != blank %}
+    {% for column_link in child_links %}
+      <div class="plt-megamenu__column">
+        <a class="plt-megamenu__title theme-label-bold" href="{{ column_link.url | escape }}">{{ column_link.title | escape }}</a>
+        {% if column_link.links.size > 0 %}
+          <ul class="plt-megamenu__list">
+            {% for child in column_link.links %}
+              <li><a class="plt-megamenu__link" href="{{ child.url | escape }}"{% if child.active %} aria-current="page"{% endif %}>{{ child.title | escape }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
