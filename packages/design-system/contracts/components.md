@@ -313,6 +313,24 @@ Interactive version: `<plt-sort-select>`; a change emits a cancelable `plt:sort-
 
 Optional: `action`, `method`, `input_name`, `placeholder`, `value`, `submit_label`.
 
+Interactive version with suggestions: **PredictiveSearch** (below).
+
+## PredictiveSearch
+
+Interactive version of SearchField: `<plt-predictive-search>` (`@playlovetoys/web-components`, Lit). The element never fetches and holds no platform logic; the consumer owns the search API (for Shopify the theme bridge calls `/search/suggest.json`).
+
+Props / attributes: `action` (default `/search`), `name` (default `q`), `method`, `value`, `placeholder`, `min-length` (default 2), `debounce` (ms, default 200), `labels`, `results`, `loading`.
+
+`results` = `{ groups: [{ id, label, items: [{ id?, title, url, imageUrl?, imageAlt?, meta?, price? }] }], viewAllUrl? }` — `id` is `products`, `collections`, `pages` or `queries` (any string works; empty groups are skipped). Prices are display strings formatted by the consumer. `viewAllUrl` defaults to `{action}?{name}={query}`. `labels` = `{ input, submit, loading, empty, count, viewAll }`; `empty` replaces `{query}` and `count` replaces `{count}`.
+
+States: *idle* (popup hidden below `min-length`), *loading* (`loading` set; popup shows the loading message and `aria-busy`), *results* (grouped options plus a final "view all" option), *empty* (`results` set with no items; the empty message is shown).
+
+Events: `plt:predictive-search-query` (`{ query }`, debounced, only at `min-length` or more) asks the consumer to fetch; set `loading` before, then `results` and clear `loading`. `plt:predictive-search-select` (cancelable; `{ kind: "item" | "all", url, groupId?, item?, query }`) fires before an option is followed (click or Enter); cancel it to navigate client-side.
+
+Accessibility (ARIA 1.2 combobox): the input has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox) and `aria-activedescendant`; the popup is a `role="listbox"` of `role="group"` sections (labelled by their heading) holding `role="option"` rows, each a real link. A `role="status"` live region announces loading, the number of suggestions, or the empty message. Keyboard: ArrowDown / ArrowUp move through the options and wrap, Enter follows the active option (with none active it submits the form), Escape closes the popup and a second Escape clears the field; Tab, focus loss or a pointer press outside closes it.
+
+No-JS: the Liquid adapter renders a `data-plt-fallback` GET form that the element retires on upgrade (what was typed is kept).
+
 ## Pagination
 
 Required: `pages` — array of `{ label, url?, current?, disabled? }`.
@@ -420,6 +438,26 @@ No required data props. Named slots: `aside`, `main`, `rail` (optional). Optiona
 Document chrome (html/head/header/footer), source sync, and section tabs stay in the application.
 
 Astro-only until a Liquid consumer exists.
+
+## Syncable Liquid adapters
+
+`packages/web-components/adapters/liquid/plt-*.liquid` are what a Shopify theme copies with `npm run sync:plt`. Interactive components have hand-written adapters (see that folder's README). The static renderers below also ship as syncable, self-contained snippets generated from `renderers/liquid/*.liquid` by `npm run build:adapters` (`check:adapters` fails when stale): each has a `{% doc %}` block, uses no `{% render %}` / `{% include %}` of other snippets and no filter expressions in render arguments, takes normalized inputs, and escapes text (`body`, `content`, `icon`, `newsletter` and `legal` are trusted HTML supplied by the theme).
+
+| Contract | Snippet |
+| --- | --- |
+| EditorialCard | `plt-article-card` |
+| CollectionCard | `plt-collection-card` |
+| Swatch | `plt-swatch` |
+| StickyAddToCart | `plt-buy-bar` |
+| RichText | `plt-prose` |
+| TrustBar | `plt-trust-bar` |
+| LinkGrid | `plt-link-grid` |
+| ChipPills | `plt-chip-pills` |
+| LocationCard | `plt-location-card` |
+| Newsletter | `plt-newsletter` |
+| Footer | `plt-footer` |
+
+Interactive adapters added for the Liquid theme: `plt-product-gallery` (normalized `media`; slides, thumbnails, optional zoom/lightbox, no-JS link list), `plt-quick-view` (trigger link to the product page + dialog body passed as `content`), `plt-cart-line` (normalized `line`, no-JS form posting to `/cart/change`) and `plt-predictive-search`.
 
 ## Pending storefront units
 

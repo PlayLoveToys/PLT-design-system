@@ -1,5 +1,5 @@
 import { LitElement, type PropertyValues } from "lit";
-import { emit } from "../shared/element.js";
+import { emit, retireFallback } from "../shared/element.js";
 
 export interface PltGalleryChangeDetail {
   index: number;
@@ -88,6 +88,7 @@ export class PltProductGallery extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
+    retireFallback(this);
     const thumbs = this.thumbs;
     const current = thumbs.findIndex((thumb) => thumb.getAttribute("aria-current") === "true");
     this._shownIndex = current >= 0 ? current : thumbs.length ? 0 : -1;

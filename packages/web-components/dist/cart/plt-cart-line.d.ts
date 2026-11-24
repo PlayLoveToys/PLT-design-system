@@ -37,6 +37,7 @@ export declare class PltCartLine extends LitElement {
     busy: boolean;
     constructor();
     protected createRenderRoot(): this;
+    connectedCallback(): void;
     private _onQuantity;
     private _remove;
     protected render(): typeof nothing | import("lit-html").TemplateResult<1>;

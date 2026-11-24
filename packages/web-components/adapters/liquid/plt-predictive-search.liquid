@@ -1,0 +1,61 @@
+{% doc %}
+  Liquid adapter for <plt-predictive-search>: a search field with a
+  suggestions popup. The element never fetches. The theme bridge listens to
+  `plt:predictive-search-query` (`detail.query`), calls Shopify's
+  `/search/suggest.json` (or a section), maps the response to the
+  PredictiveSearch results contract and sets `element.results = { groups }`,
+  clearing `element.loading`. No Shopify-specific logic lives in the design
+  system. Without JavaScript the fallback form is a normal GET search.
+
+  Results contract (set on the element):
+    { groups: [{ id: 'products'|'collections'|'pages'|'queries', label,
+        items: [{ id?, title, url, imageUrl?, imageAlt?, meta?, price? }] }],
+      viewAllUrl? }
+  Events: plt:predictive-search-query, plt:predictive-search-select (cancelable).
+
+  @param {string} [id] - Element id (default: plt-predictive-search)
+  @param {string} [action] - Search URL (default: /search; pass routes.search_url)
+  @param {string} [name] - Query parameter (default: q)
+  @param {string} [value] - Current search terms (e.g. search.terms)
+  @param {string} [placeholder]
+  @param {number} [min_length] - Minimum characters before querying (default: 2)
+  @param {number} [debounce] - Debounce in ms (default: 200)
+  @param {string} [input_label] - Accessible name of the input (default: Search)
+  @param {string} [submit_label] - Submit button label (default: Search)
+  @param {string} [loading_label] - Loading message
+  @param {string} [empty_label] - Empty message; `{query}` is replaced
+  @param {string} [count_label] - Screen reader count; `{count}` is replaced
+  @param {string} [view_all_label] - "View all results" label
+  @param {string} [script_url] - Bundle URL; 'none' skips the tag
+{% enddoc %}
+{%- liquid
+  assign search_action = action | default: '/search'
+  assign field_name = name | default: 'q'
+  assign minimum = min_length | default: 2
+  assign wait = debounce | default: 200
+  assign label_text = input_label | default: 'Search'
+  assign submit_text = submit_label | default: 'Search'
+  assign bundle_url = script_url | default: ''
+  if bundle_url == blank
+    assign bundle_url = 'plt-web-components.bundle.js' | asset_url
+  endif
+-%}
+{%- capture labels_json -%}
+  {"input":{{ label_text | json }},"submit":{{ submit_text | json }}{% if loading_label != blank %},"loading":{{ loading_label | json }}{% endif %}{% if empty_label != blank %},"empty":{{ empty_label | json }}{% endif %}{% if count_label != blank %},"count":{{ count_label | json }}{% endif %}{% if view_all_label != blank %},"viewAll":{{ view_all_label | json }}{% endif %}}
+{%- endcapture -%}
+<plt-predictive-search
+  id="{{ id | default: 'plt-predictive-search' | escape }}"
+  action="{{ search_action | escape }}"
+  name="{{ field_name | escape }}"
+  value="{{ value | escape }}"
+  min-length="{{ minimum | escape }}"
+  debounce="{{ wait | escape }}"
+  {% if placeholder != blank %}placeholder="{{ placeholder | escape }}"{% endif %}
+  labels="{{ labels_json | strip | escape }}"
+>
+  <form data-plt-fallback class="plt-search-field" action="{{ search_action | escape }}" method="get" role="search">
+    <input class="d-input" type="search" name="{{ field_name | escape }}" value="{{ value | escape }}"{% if placeholder != blank %} placeholder="{{ placeholder | escape }}"{% endif %} aria-label="{{ label_text | escape }}">
+    <button class="d-btn d-btn-primary theme-bordered theme-elevated theme-label-bold" type="submit">{{ submit_text | escape }}</button>
+  </form>
+</plt-predictive-search>
+{%- if bundle_url != 'none' -%}<script type="module" src="{{ bundle_url | escape }}"></script>{%- endif -%}

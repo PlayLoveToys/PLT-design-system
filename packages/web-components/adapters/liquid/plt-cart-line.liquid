@@ -1,0 +1,56 @@
+{% doc %}
+  Liquid adapter for <plt-cart-line>: one cart line from normalized input
+  (prices formatted by the theme; the component never computes money). The
+  theme owns the cart: it listens to plt:cart-line-change / plt:cart-line-remove
+  on the element, calls /cart/change.js, then sets `line` (and clears `busy`).
+  Without JavaScript the fallback shows the line and a quantity form that
+  posts to /cart/change.
+
+  @param {object} line - { id, title, price, quantity, url?, image_url?, image_alt?, variant_title?, compare_at_price?, max_quantity?, index? }. `index` is the 1-based cart line used by the no-JS form.
+  @param {string} [cart_url] - Form action of the no-JS fallback (default: /cart/change)
+  @param {string} [remove_label]
+  @param {string} [decrease_label]
+  @param {string} [increase_label]
+  @param {string} [quantity_label]
+  @param {string} [update_label] - No-JS submit label (default: Update)
+  @param {string} [script_url] - Bundle URL; 'none' skips the tag
+{% enddoc %}
+{%- liquid
+  assign remove_text = remove_label | default: 'Remove'
+  assign quantity_text = quantity_label | default: 'Quantity'
+  assign update_text = update_label | default: 'Update'
+  assign change_url = cart_url | default: '/cart/change'
+  assign bundle_url = script_url | default: ''
+  if bundle_url == blank
+    assign bundle_url = 'plt-web-components.bundle.js' | asset_url
+  endif
+-%}
+{%- capture line_json -%}
+  {"id":{{ line.id | json }},"title":{{ line.title | json }},"url":{% if line.url != blank %}{{ line.url | json }}{% else %}null{% endif %},"imageUrl":{% if line.image_url != blank %}{{ line.image_url | json }}{% else %}null{% endif %},"imageAlt":{% if line.image_url != blank %}{{ line.image_alt | default: line.title | json }}{% else %}null{% endif %},"variantTitle":{% if line.variant_title != blank %}{{ line.variant_title | json }}{% else %}null{% endif %},"quantity":{{ line.quantity | json }},"price":{{ line.price | json }},"compareAtPrice":{% if line.compare_at_price != blank %}{{ line.compare_at_price | json }}{% else %}null{% endif %}{% if line.max_quantity != blank %},"maxQuantity":{{ line.max_quantity | json }}{% endif %}}
+{%- endcapture -%}
+{%- capture labels_json -%}
+  {"decrease":{{ decrease_label | default: 'Decrease quantity' | json }},"increase":{{ increase_label | default: 'Increase quantity' | json }},"quantity":{{ quantity_text | json }},"remove":{{ remove_text | json }}}
+{%- endcapture -%}
+<plt-cart-line line="{{ line_json | strip | escape }}" labels="{{ labels_json | strip | escape }}">
+  <article data-plt-fallback class="plt-cart-line">
+    <div class="plt-cart-line__media">
+      {%- if line.image_url != blank -%}<img src="{{ line.image_url | escape }}" alt="{{ line.image_alt | default: line.title | escape }}" loading="lazy">{%- endif -%}
+    </div>
+    <div>
+      <h3 class="theme-headline-sm plt-cart-line__title">
+        {%- if line.url != blank -%}<a href="{{ line.url | escape }}">{{ line.title | escape }}</a>{%- else -%}{{ line.title | escape }}{%- endif -%}
+      </h3>
+      {%- if line.variant_title != blank -%}<p class="theme-meta plt-cart-line__meta">{{ line.variant_title | escape }}</p>{%- endif -%}
+      <form class="plt-cart-line__controls" action="{{ change_url | escape }}" method="post">
+        <input type="hidden" name="line" value="{{ line.index | default: 1 | escape }}">
+        <input class="d-input" type="number" name="quantity" value="{{ line.quantity | escape }}" min="0"{% if line.max_quantity != blank %} max="{{ line.max_quantity | escape }}"{% endif %} aria-label="{{ quantity_text | escape }}, {{ line.title | escape }}">
+        <button type="submit" class="d-btn d-btn-sm">{{ update_text | escape }}</button>
+        <button type="submit" name="quantity" value="0" class="d-btn d-btn-ghost d-btn-sm theme-label-bold plt-cart-line__remove" aria-label="{{ remove_text | escape }}: {{ line.title | escape }}">{{ remove_text | escape }}</button>
+      </form>
+    </div>
+    <div class="plt-cart-line__price">
+      {%- if line.compare_at_price != blank -%}<s class="plt-cart-line__compare">{{ line.compare_at_price | escape }}</s> {% endif -%}{{ line.price | escape }}
+    </div>
+  </article>
+</plt-cart-line>
+{%- if bundle_url != 'none' -%}<script type="module" src="{{ bundle_url | escape }}"></script>{%- endif -%}

@@ -33,3 +33,65 @@
     border-top: var(--plt-border-width, var(--border, 1.5px)) solid var(--color-base-300);
     padding-top: 0.75rem;
   }
+
+/* <plt-predictive-search> (combobox + listbox). */
+.plt-predictive-search {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.plt-predictive-search > .d-input {
+  flex: 1 1 12rem;
+}
+
+.plt-predictive-search__panel {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 100%;
+  z-index: 30;
+  max-height: min(70vh, 32rem);
+  overflow-y: auto;
+  margin-block-start: 0.25rem;
+  background: var(--color-base-100);
+  border: var(--plt-border-width, var(--border, 1.5px)) solid var(--color-base-300);
+  border-radius: var(--radius-box, 0.5rem);
+}
+
+.plt-predictive-search__panel[hidden] {
+  display: none;
+}
+
+.plt-predictive-search__state {
+  padding: 0.5rem 0.75rem;
+}
+
+.plt-predictive-search__option[data-active] > .predictive-search__link {
+  background-color: var(--color-base-300);
+}
+
+.plt-predictive-search__option .predictive-search__link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.plt-predictive-search__image {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: cover;
+  border-radius: var(--radius-field, 0.25rem);
+}
+
+.plt-predictive-search__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.plt-predictive-search__price {
+  flex: none;
+}

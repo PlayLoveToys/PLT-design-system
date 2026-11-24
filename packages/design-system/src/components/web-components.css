@@ -6,7 +6,7 @@
  */
 
 /* Server-rendered no-JS fallbacks disappear once their element is defined. */
-:is(plt-quantity-selector, plt-cart-line, plt-filter-bar, plt-sort-select, plt-pagination):defined > [data-plt-fallback] {
+:is(plt-quantity-selector, plt-cart-line, plt-filter-bar, plt-sort-select, plt-pagination, plt-product-gallery, plt-predictive-search):defined > [data-plt-fallback] {
   display: none;
 }
 plt-quantity-selector { display: inline-block; }

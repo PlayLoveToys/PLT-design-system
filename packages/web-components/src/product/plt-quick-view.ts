@@ -11,7 +11,8 @@ export const QUICK_VIEW_CLOSE_EVENT = "plt:quick-view-close";
  * trigger, a `<dialog>`, and `[data-quick-view-close]` controls. Opening calls
  * `showModal()` (focus moves into the dialog, Escape closes), locks page scroll
  * (shared by every open modal), and closing returns focus to the trigger.
- * Clicking the backdrop closes it. Adds an `open` property and events.
+ * Clicking the backdrop closes it. The trigger may be a link to the product
+ * page (it stays the no-JavaScript path). Adds an `open` property and events.
  *
  * @fires plt:quick-view-open
  * @fires plt:quick-view-close
@@ -89,7 +90,11 @@ export class PltQuickView extends LitElement {
   private _onClick(event: MouseEvent) {
     const target = event.target as Element | null;
     if (!target?.closest) return;
-    if (target.closest("[data-quick-view-open]")) return this.show();
+    if (target.closest("[data-quick-view-open]")) {
+      // A trigger rendered as a link still works without JavaScript; with it, open the dialog instead.
+      event.preventDefault();
+      return this.show();
+    }
     if (target.closest("[data-quick-view-close]")) return this.close();
     const dialog = this.dialog;
     if (dialog && target === dialog) {

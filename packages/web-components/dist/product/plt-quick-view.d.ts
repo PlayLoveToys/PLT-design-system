@@ -8,7 +8,8 @@ export declare const QUICK_VIEW_CLOSE_EVENT = "plt:quick-view-close";
  * trigger, a `<dialog>`, and `[data-quick-view-close]` controls. Opening calls
  * `showModal()` (focus moves into the dialog, Escape closes), locks page scroll
  * (shared by every open modal), and closing returns focus to the trigger.
- * Clicking the backdrop closes it. Adds an `open` property and events.
+ * Clicking the backdrop closes it. The trigger may be a link to the product
+ * page (it stays the no-JavaScript path). Adds an `open` property and events.
  *
  * @fires plt:quick-view-open
  * @fires plt:quick-view-close

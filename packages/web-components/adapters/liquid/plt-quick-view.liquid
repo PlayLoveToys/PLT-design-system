@@ -1,0 +1,41 @@
+{% doc %}
+  Liquid adapter for <plt-quick-view>: a trigger plus a modal <dialog>. The
+  trigger is a link to `url`, so without JavaScript it simply opens the
+  product page; once the element upgrades it opens the dialog instead. The
+  theme renders the dialog body (usually the product form / gallery through
+  Section Rendering) and passes it as `content`; the DS never fetches or
+  reads Shopify objects. Events: plt:quick-view-open / plt:quick-view-close.
+
+  @param {string} url - Product page URL (no-JS destination of the trigger)
+  @param {string} content - Pre-rendered, trusted HTML for the dialog body
+  @param {string} [id] - Element id
+  @param {string} [title] - Accessible name of the dialog (default: trigger label)
+  @param {string} [trigger_label] - Trigger text (default: Quick view)
+  @param {string} [trigger_class] - Extra classes for the trigger
+  @param {string} [close_label] - Close button label (default: Close)
+  @param {string} [script_url] - Bundle URL; 'none' skips the tag
+{% enddoc %}
+{%- liquid
+  assign trigger_text = trigger_label | default: 'Quick view'
+  assign close_text = close_label | default: 'Close'
+  assign dialog_name = title | default: trigger_text
+  assign bundle_url = script_url | default: ''
+  if bundle_url == blank
+    assign bundle_url = 'plt-web-components.bundle.js' | asset_url
+  endif
+-%}
+<plt-quick-view{% if id != blank %} id="{{ id | escape }}"{% endif %}>
+  <a class="d-btn d-btn-outline theme-bordered theme-elevated {{ trigger_class | escape }}" href="{{ url | escape }}" data-quick-view-open>{{ trigger_text | escape }}</a>
+  <dialog class="d-modal" aria-label="{{ dialog_name | escape }}">
+    <div class="d-modal-box w-11/12 max-w-5xl bg-base-100 theme-bordered theme-elevated">
+      <form method="dialog">
+        <button class="d-btn d-btn-sm d-btn-circle d-btn-ghost absolute right-2 top-2" aria-label="{{ close_text | escape }}" data-quick-view-close>✕</button>
+      </form>
+      {{ content }}
+    </div>
+    <form method="dialog" class="d-modal-backdrop">
+      <button data-quick-view-close aria-label="{{ close_text | escape }}">{{ close_text | escape }}</button>
+    </form>
+  </dialog>
+</plt-quick-view>
+{%- if bundle_url != 'none' -%}<script type="module" src="{{ bundle_url | escape }}"></script>{%- endif -%}

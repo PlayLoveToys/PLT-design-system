@@ -1,0 +1,120 @@
+{% doc %}
+  Liquid adapter for <plt-product-gallery>: renders normalized media items as
+  slides + thumbnails. The theme normalizes Shopify media (`product.media`)
+  into plain objects; no Shopify object logic lives here. Without JavaScript
+  the selected slide is shown, the lightbox opener is a link to the large
+  image, and a `data-plt-fallback` list links every other image; the element
+  retires that list once it upgrades.
+
+  Each item: { url, alt?, width?, height?, media_type?, thumbnail_url?,
+  thumbnail_width?, thumbnail_height?, srcset?, sizes?, id?, video_url?,
+  embed_url?, poster_url? }. `media_type` is image (default), video,
+  external_video or model.
+
+  @param {object[]} media - Normalized media items (see above)
+  @param {string} [title] - Product title (fallback alt text)
+  @param {string} [selected_media_id] - `id` of the item shown first (default: first)
+  @param {boolean} [zoom] - Hover zoom + lightbox on image slides
+  @param {string} [thumb_label] - Thumbnail label prefix (default: Show image)
+  @param {string} [zoom_label] - Lightbox opener label (default: Zoom image)
+  @param {string} [close_label] - Lightbox close label (default: Close)
+  @param {string} [prev_label] - Thumbnail track "previous" label
+  @param {string} [next_label] - Thumbnail track "next" label
+  @param {string} [script_url] - Bundle URL; 'none' skips the tag
+{% enddoc %}
+{%- liquid
+  assign gallery_title = title | default: ''
+  assign zoom_on = zoom | default: false
+  assign thumb_text = thumb_label | default: 'Show image'
+  assign zoom_text = zoom_label | default: 'Zoom image'
+  assign close_text = close_label | default: 'Close'
+  assign prev_text = prev_label | default: 'Previous images'
+  assign next_text = next_label | default: 'Next images'
+  assign selected_id = selected_media_id | append: ''
+  assign selected_position = 0
+  if selected_id != blank
+    for item in media
+      assign item_id = item.id | append: ''
+      if item_id == selected_id
+        assign selected_position = forloop.index0
+        break
+      endif
+    endfor
+  endif
+  assign bundle_url = script_url | default: ''
+  if bundle_url == blank
+    assign bundle_url = 'plt-web-components.bundle.js' | asset_url
+  endif
+-%}
+{%- if media.size > 0 -%}
+<plt-product-gallery class="plt-product-detail__gallery" selected-index="{{ selected_position }}">
+  <div class="plt-product-detail__gallery-main">
+    {%- for item in media -%}
+      {%- liquid
+        assign kind = item.media_type | default: 'image'
+        assign item_alt = item.alt | default: gallery_title
+        assign item_hidden = true
+        if forloop.index0 == selected_position
+          assign item_hidden = false
+        endif
+      -%}
+      <div class="plt-product-detail__slide" data-plt-gallery-slide{% if item.id != blank %} data-media-id="{{ item.id | escape }}"{% endif %}{% if item_hidden %} hidden{% endif %}>
+        {%- if kind == 'video' -%}
+          <video controls playsinline preload="metadata"{% if item.poster_url != blank %} poster="{{ item.poster_url | escape }}"{% endif %} src="{{ item.video_url | default: item.url | escape }}" aria-label="{{ item_alt | escape }}"></video>
+        {%- elsif kind == 'external_video' -%}
+          <iframe src="{{ item.embed_url | default: item.url | escape }}" title="{{ item_alt | escape }}" loading="lazy" allowfullscreen></iframe>
+        {%- elsif kind == 'model' -%}
+          <a class="d-btn d-btn-outline" href="{{ item.url | escape }}">{{ item_alt | escape }}</a>
+        {%- else -%}
+          {%- if zoom_on -%}
+            <a class="plt-product-detail__zoom-open" href="{{ item.url | escape }}" data-plt-gallery-zoom-open data-zoom-alt="{{ item_alt | escape }}" aria-label="{{ zoom_text | escape }}">
+              <span data-plt-gallery-zoom>
+                <img src="{{ item.url | escape }}"{% if item.srcset != blank %} srcset="{{ item.srcset | escape }}"{% endif %}{% if item.sizes != blank %} sizes="{{ item.sizes | escape }}"{% endif %} alt="{{ item_alt | escape }}"{% if item.width != blank %} width="{{ item.width | escape }}"{% endif %}{% if item.height != blank %} height="{{ item.height | escape }}"{% endif %}{% if forloop.index0 > 0 %} loading="lazy"{% endif %}>
+              </span>
+            </a>
+          {%- else -%}
+            <img src="{{ item.url | escape }}"{% if item.srcset != blank %} srcset="{{ item.srcset | escape }}"{% endif %}{% if item.sizes != blank %} sizes="{{ item.sizes | escape }}"{% endif %} alt="{{ item_alt | escape }}"{% if item.width != blank %} width="{{ item.width | escape }}"{% endif %}{% if item.height != blank %} height="{{ item.height | escape }}"{% endif %}{% if forloop.index0 > 0 %} loading="lazy"{% endif %}>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  {%- if media.size > 1 -%}
+    <div class="plt-product-detail__thumbs-wrap">
+      <button type="button" class="d-btn d-btn-ghost d-btn-sm" data-plt-gallery-thumbs-prev aria-label="{{ prev_text | escape }}">‹</button>
+      <div class="plt-product-detail__thumbs" data-plt-gallery-thumb-track role="tablist">
+        {%- for item in media -%}
+          {%- liquid
+            assign thumb_src = item.thumbnail_url | default: item.poster_url | default: item.url
+            assign thumb_alt = item.alt | default: gallery_title
+            assign on = 'false'
+            if forloop.index0 == selected_position
+              assign on = 'true'
+            endif
+          -%}
+          <button type="button" role="tab" class="plt-product-detail__thumb" data-plt-gallery-thumb aria-selected="{{ on }}" aria-current="{{ on }}" aria-label="{{ thumb_text | escape }} {{ forloop.index }}">
+            <img src="{{ thumb_src | escape }}" alt="{{ thumb_alt | escape }}"{% if item.thumbnail_width != blank %} width="{{ item.thumbnail_width | escape }}"{% endif %}{% if item.thumbnail_height != blank %} height="{{ item.thumbnail_height | escape }}"{% endif %} loading="lazy">
+          </button>
+        {%- endfor -%}
+      </div>
+      <button type="button" class="d-btn d-btn-ghost d-btn-sm" data-plt-gallery-thumbs-next aria-label="{{ next_text | escape }}">›</button>
+    </div>
+  {%- endif -%}
+  {%- if media.size > 1 -%}
+    <ul data-plt-fallback class="plt-product-detail__fallback">
+      {%- for item in media -%}
+        {%- if forloop.index0 != selected_position -%}
+          <li><a href="{{ item.url | escape }}">{{ item.alt | default: gallery_title | default: thumb_text | escape }}</a></li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+  {%- if zoom_on -%}
+    <dialog class="plt-product-detail__lightbox" data-plt-gallery-lightbox aria-label="{{ zoom_text | escape }}">
+      <button type="button" class="d-btn d-btn-sm d-btn-circle d-btn-ghost" data-plt-gallery-lightbox-close aria-label="{{ close_text | escape }}">✕</button>
+      <img data-plt-gallery-lightbox-image alt="">
+    </dialog>
+  {%- endif -%}
+</plt-product-gallery>
+{%- endif -%}
+{%- if bundle_url != 'none' -%}<script type="module" src="{{ bundle_url | escape }}"></script>{%- endif -%}
