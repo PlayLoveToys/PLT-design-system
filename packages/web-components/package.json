@@ -49,6 +49,14 @@
       "types": "./dist/quantity-selector/define.d.ts",
       "default": "./dist/quantity-selector/define.js"
     },
+    "./search": {
+      "types": "./dist/search/index.d.ts",
+      "default": "./dist/search/index.js"
+    },
+    "./search/define": {
+      "types": "./dist/search/define.d.ts",
+      "default": "./dist/search/define.js"
+    },
     "./cart": {
       "types": "./dist/cart/index.d.ts",
       "default": "./dist/cart/index.js"
@@ -93,12 +101,14 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:adapters": "node scripts/build-static-adapters.mjs",
+    "check:adapters": "node scripts/build-static-adapters.mjs --check",
     "check:dist": "node scripts/build.mjs --check",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:browser": "node scripts/build-examples.mjs && vitest run --config vitest.browser.config.ts",
     "size": "node scripts/measure-bundle.mjs",
-    "check": "npm run typecheck && npm run check:dist && npm run test && npm run test:browser"
+    "check": "npm run typecheck && npm run check:adapters && npm run check:dist && npm run test && npm run test:browser"
   },
   "dependencies": {
     "lit": "^3.3.1"

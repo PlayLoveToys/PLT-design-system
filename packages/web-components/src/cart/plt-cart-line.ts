@@ -1,6 +1,6 @@
 import { LitElement, html, nothing } from "lit";
 import { live } from "lit/directives/live.js";
-import { emit, jsonConverter } from "../shared/element.js";
+import { emit, jsonConverter, retireFallback } from "../shared/element.js";
 import type { PltQuantityChangeDetail } from "../quantity-selector/types.js";
 import {
   CART_LINE_CHANGE_EVENT,
@@ -44,6 +44,12 @@ export class PltCartLine extends LitElement {
 
   protected override createRenderRoot() {
     return this;
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    // Server-rendered no-JS markup (`data-plt-fallback`) gives way to the rendered line.
+    retireFallback(this);
   }
 
   private _onQuantity(event: CustomEvent<PltQuantityChangeDetail>) {

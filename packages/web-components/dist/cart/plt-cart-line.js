@@ -1,6 +1,6 @@
 import { LitElement, html, nothing } from "lit";
 import { live } from "lit/directives/live.js";
-import { emit, jsonConverter } from "../shared/element.js";
+import { emit, jsonConverter, retireFallback } from "../shared/element.js";
 import {
   CART_LINE_CHANGE_EVENT,
   CART_LINE_REMOVE_EVENT,
@@ -16,6 +16,10 @@ class PltCartLine extends LitElement {
   }
   createRenderRoot() {
     return this;
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    retireFallback(this);
   }
   _onQuantity(event) {
     event.stopPropagation();

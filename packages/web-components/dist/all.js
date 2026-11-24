@@ -4,3 +4,4 @@ import "./cart/define.js";
 import "./collection/define.js";
 import "./product/define.js";
 import "./navigation/define.js";
+import "./search/define.js";

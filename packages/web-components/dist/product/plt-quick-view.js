@@ -59,7 +59,10 @@ class PltQuickView extends LitElement {
   _onClick(event) {
     const target = event.target;
     if (!target?.closest) return;
-    if (target.closest("[data-quick-view-open]")) return this.show();
+    if (target.closest("[data-quick-view-open]")) {
+      event.preventDefault();
+      return this.show();
+    }
     if (target.closest("[data-quick-view-close]")) return this.close();
     const dialog = this.dialog;
     if (dialog && target === dialog) {

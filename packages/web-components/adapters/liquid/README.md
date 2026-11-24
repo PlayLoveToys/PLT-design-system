@@ -112,3 +112,92 @@ Con datos ya normalizados (metafields del theme):
    (véase PRs #31, #32, #34 del theme).
 5. Para localización Shopify, pasar `localization_slot` con el `form` del theme
    o mapear `countries` / `languages` antes del render.
+
+---
+
+## Adaptadores de componentes interactivos
+
+Todos aceptan `script_url: 'none'` (si otro snippet ya cargó el bundle), traen un
+bloque `{% doc %}` y reciben datos **ya normalizados** por el theme: el DS no lee
+objetos Shopify ni llama a la Cart API ni a `/search/suggest`.
+
+### `plt-product-gallery.liquid` (DS#21)
+
+**Elemento:** `<plt-product-gallery>`. Reemplaza `snippets/product-media-gallery.liquid`.
+
+| Parámetro | Descripción |
+| --- | --- |
+| `media` | Array normalizado: `{ url, alt?, width?, height?, media_type?, thumbnail_url?, thumbnail_width?, thumbnail_height?, srcset?, sizes?, id?, video_url?, embed_url?, poster_url? }`. `media_type`: `image` (default), `video`, `external_video`, `model`. |
+| `title` | Texto alt de reserva |
+| `selected_media_id` | `id` del medio visible al inicio |
+| `zoom` | Activa zoom por hover + lightbox en imágenes |
+| `thumb_label`, `zoom_label`, `close_label`, `prev_label`, `next_label` | Etiquetas |
+
+Sin JS se ve el medio seleccionado y una lista `data-plt-fallback` con enlaces a
+las demás imágenes (el elemento la retira al registrarse). `data-media-id` permite
+`gallery.selectMedia(id)` al cambiar de variante. Evento: `plt:gallery-change`.
+
+```liquid
+{% liquid
+  assign media_items = '[]' | parse_json
+%}
+{% render 'plt-product-gallery', media: media_items, title: product.title, zoom: true, script_url: 'none' %}
+```
+
+### `plt-quick-view.liquid` y `plt-cart-line.liquid` (DS#22)
+
+- **`plt-quick-view`**: `url` (destino sin JS: el disparador es un enlace a la
+  página de producto), `content` (HTML ya renderizado del cuerpo del diálogo),
+  `id`, `title`, `trigger_label`, `trigger_class`, `close_label`. Eventos:
+  `plt:quick-view-open` / `plt:quick-view-close`.
+- **`plt-cart-line`**: `line` = `{ id, title, price, quantity, url?, image_url?,
+  image_alt?, variant_title?, compare_at_price?, max_quantity?, index? }` (precios
+  ya formateados con `money`), más etiquetas. Sin JS, formulario `POST` a
+  `/cart/change` (`line` = `index`). Eventos que el theme debe escuchar:
+  `plt:cart-line-change` (`{ lineId, quantity, previousQuantity }`) y
+  `plt:cart-line-remove` (`{ lineId }`); tras llamar a `/cart/change.js` el theme
+  vuelve a fijar `line` y limpia `busy`.
+
+### `plt-predictive-search.liquid` (DS#20)
+
+**Elemento:** `<plt-predictive-search>`; contrato en
+`packages/design-system/contracts/components.md` (**PredictiveSearch**). Parámetros:
+`action` (`routes.search_url`), `name`, `value` (`search.terms`), `placeholder`,
+`min_length`, `debounce`, `input_label`, `submit_label`, `loading_label`,
+`empty_label`, `count_label`, `view_all_label`, `id`.
+
+El theme es dueño del fetch:
+
+```js
+const el = document.getElementById("plt-predictive-search");
+let controller;
+el.addEventListener("plt:predictive-search-query", async ({ detail }) => {
+  controller?.abort(); // drop the stale request
+  controller = new AbortController();
+  el.loading = true;
+  try {
+    const params = new URLSearchParams({ q: detail.query, "resources[type]": "product,collection,page,query" });
+    const response = await fetch(`${routes.predictive_search_url}.json?${params}`, { signal: controller.signal });
+    const { resources } = await response.json();
+    el.results = mapSuggestions(resources.results); // → { groups: [...] }
+  } catch (error) {
+    if (error.name === "AbortError") return;
+    el.results = { groups: [] };
+  }
+  el.loading = false;
+});
+```
+
+(`mapSuggestions` vive en el theme y convierte `products`, `collections`, `pages`
+y `queries` de Shopify en `groups`.)
+
+### Renderers estáticos como snippets sincronizables (DS#23)
+
+`plt-article-card` (EditorialCard), `plt-collection-card`, `plt-swatch`,
+`plt-buy-bar` (StickyAddToCart), `plt-prose` (RichText), `plt-trust-bar`,
+`plt-link-grid`, `plt-chip-pills`, `plt-location-card`, `plt-newsletter` y
+`plt-footer`. Se **generan** desde `packages/design-system/renderers/liquid/` con
+`npm run build:adapters` (`npm run check:adapters` falla si están desactualizados):
+no se editan a mano. Cada uno es autocontenido (sin `{% render %}` ni `{% include %}`
+de otros snippets), tiene `{% doc %}`, escapa los textos y solo deja HTML sin escapar
+en `body`, `content`, `icon`, `newsletter` y `legal`, que el theme debe sanear.

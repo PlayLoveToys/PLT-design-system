@@ -1,5 +1,5 @@
 import { LitElement } from "lit";
-import { emit } from "../shared/element.js";
+import { emit, retireFallback } from "../shared/element.js";
 const GALLERY_CHANGE_EVENT = "plt:gallery-change";
 const THUMB = ".plt-product-detail__thumb, [data-plt-gallery-thumb]";
 const MAIN_IMAGE = ".plt-product-detail__gallery-main img";
@@ -37,6 +37,7 @@ class PltProductGallery extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
+    retireFallback(this);
     const thumbs = this.thumbs;
     const current = thumbs.findIndex((thumb) => thumb.getAttribute("aria-current") === "true");
     this._shownIndex = current >= 0 ? current : thumbs.length ? 0 : -1;

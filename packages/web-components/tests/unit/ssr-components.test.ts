@@ -116,6 +116,68 @@ describe("server rendering of every component", () => {
     expect(html).not.toContain("<b>");
   });
 
+  it("Liquid: product gallery renders slides, thumbnails, fallback and lightbox", async () => {
+    const media = [
+      { id: 11, url: "/a.jpg", alt: "Front <b>", width: 800, height: 600, thumbnail_url: "/a-t.jpg" },
+      { id: 12, url: "/b.jpg", alt: "Back", media_type: "image" },
+      { id: 13, media_type: "video", video_url: "/v.mp4", poster_url: "/v.jpg", url: "/v.mp4", alt: "Demo" },
+    ];
+    const html = await render(`${adapters}plt-product-gallery.liquid`, { media, title: "Tee", zoom: true, selected_media_id: 12, script_url: "none" });
+    expect(html).toContain('<plt-product-gallery class="plt-product-detail__gallery" selected-index="1">');
+    expect(html.match(/data-plt-gallery-slide/g)).toHaveLength(3);
+    expect(html).toMatch(/data-media-id="12">/); // selected slide is not hidden
+    expect(html).toMatch(/data-media-id="11" hidden>/);
+    expect(html.match(/data-plt-gallery-thumb /g)).toHaveLength(3);
+    expect(html).toContain('data-plt-gallery-thumb aria-selected="true" aria-current="true"');
+    expect(html).toContain('src="/a-t.jpg"');
+    expect(html).toContain("Front &lt;b&gt;");
+    expect(html).not.toContain("<b>");
+    expect(html).toContain('<video controls playsinline preload="metadata" poster="/v.jpg" src="/v.mp4"');
+    expect(html).toContain("data-plt-gallery-zoom-open");
+    expect(html).toContain("<dialog class=\"plt-product-detail__lightbox\" data-plt-gallery-lightbox");
+    expect(html).toContain('<ul data-plt-fallback class="plt-product-detail__fallback">');
+    expect(html).not.toContain("<script");
+    expect(await render(`${adapters}plt-product-gallery.liquid`, { media: [], script_url: "none" })).toBe("");
+    const single = await render(`${adapters}plt-product-gallery.liquid`, { media: [{ url: "/a.jpg" }], title: "Tee", script_url: "none" });
+    expect(single).not.toContain("data-plt-gallery-thumb");
+    expect(single).not.toContain("data-plt-fallback");
+  });
+
+  it("Liquid: quick view links to the product without JavaScript", async () => {
+    const html = await render(`${adapters}plt-quick-view.liquid`, { url: "/products/tee", content: "<p class=\"body\">Form</p>", id: "qv-1", close_label: "Fermer", script_url: "none" });
+    expect(html).toContain('<plt-quick-view id="qv-1">');
+    expect(html).toMatch(/<a [^>]*href="\/products\/tee" data-quick-view-open>Quick view<\/a>/);
+    expect(html).toContain('<p class="body">Form</p>');
+    expect(html).toContain('aria-label="Fermer" data-quick-view-close');
+    expect(html).not.toContain("<script");
+  });
+
+  it("Liquid: cart line maps normalized input and keeps a posting fallback", async () => {
+    const line = { id: "40001:abc", index: 2, title: "Play <Tee>", url: "/products/tee", image_url: "/tee.jpg", variant_title: "Red / S", quantity: 2, price: "$38.00", compare_at_price: "$44.00", max_quantity: 5 };
+    const html = await render(`${adapters}plt-cart-line.liquid`, { line, remove_label: "Retirer", script_url: "none" });
+    expect(attribute(html, "line")).toEqual({
+      id: "40001:abc", title: "Play <Tee>", url: "/products/tee", imageUrl: "/tee.jpg", imageAlt: "Play <Tee>",
+      variantTitle: "Red / S", quantity: 2, price: "$38.00", compareAtPrice: "$44.00", maxQuantity: 5,
+    });
+    expect(attribute(html, "labels")).toMatchObject({ remove: "Retirer", quantity: "Quantity" });
+    expect(html).toContain('<article data-plt-fallback class="plt-cart-line">');
+    expect(html).toContain('action="/cart/change" method="post"');
+    expect(html).toContain('<input type="hidden" name="line" value="2">');
+    expect(html).not.toContain("<Tee>");
+    const bare = await render(`${adapters}plt-cart-line.liquid`, { line: { id: "x", title: "Ring", quantity: 1, price: "$1.00" }, script_url: "none" });
+    expect(attribute(bare, "line")).toMatchObject({ url: null, imageUrl: null, variantTitle: null, compareAtPrice: null });
+  });
+
+  it("Liquid: predictive search keeps Shopify fetching out and posts a GET form without JS", async () => {
+    const html = await render(`${adapters}plt-predictive-search.liquid`, { action: "/en/search", value: 'ti"e', placeholder: "Search", min_length: 3, empty_label: "Rien pour {query}", script_url: "none" });
+    expect(html).toMatch(/<plt-predictive-search\s+id="plt-predictive-search"\s+action="\/en\/search"\s+name="q"\s+value="ti&#34;e"\s+min-length="3"\s+debounce="200"/);
+    expect(attribute(html, "labels")).toEqual({ input: "Search", submit: "Search", empty: "Rien pour {query}" });
+    expect(html).toContain('<form data-plt-fallback class="plt-search-field" action="/en/search" method="get" role="search">');
+    expect(html).toMatch(/<input class="d-input" type="search" name="q" value="ti&#34;e" placeholder="Search"/);
+    expect(html).not.toContain("/search/suggest");
+    expect(html).not.toContain("<script");
+  });
+
   it("Liquid: filters, sort options and paginate", async () => {
     const filters = [
       { type: "list", param_name: "filter.v.option.color", label: "Color", values: [{ value: "Red", label: "Red", active: true, count: 4 }, { value: "Blue", label: "Blue", active: true, count: 2 }] },

@@ -51,6 +51,7 @@
     "./renderers/liquid/*": "./renderers/liquid/*",
     "./renderers/astro/*": "./renderers/astro/*",
     "./base": "./src/base.css",
+    "./scoped-preflight": "./src/scoped-preflight.css",
     "./themes/*": "./themes/*.css"
   },
   "peerDependencies": {
