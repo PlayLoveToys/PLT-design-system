@@ -9,3 +9,5 @@ packages/web-components/examples/astro/.astro/
 # Dawn legacy harness output (packages/web-components/tests/fixtures/dawn-legacy)
 packages/web-components/examples/.out-dawn/
 packages/web-components/tests/fixtures/dawn-legacy/*.input.css
+node_modules
+.venv/
